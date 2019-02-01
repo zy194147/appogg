@@ -1,5 +1,4 @@
-# appogg
-my website :  www.appogg.com
+# appogg项目
 
 网站域名：www.appogg.com
 
