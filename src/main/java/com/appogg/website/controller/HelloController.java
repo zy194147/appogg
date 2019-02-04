@@ -19,7 +19,7 @@ public class HelloController extends BaseController<HelloBiz,Hello> {
 
     @RequestMapping("say")
     public ObjectRestResponse hello(HttpServletResponse response){
-        response.setHeader("Access-Control-Allow-Origin", "*");
+//        response.setHeader("Access-Control-Allow-Origin", "*");
         ObjectRestResponse objectRestResponse = this.baseBiz.say2();
 //        List<Hello> hellos = helloBiz.say2();
         return objectRestResponse;
