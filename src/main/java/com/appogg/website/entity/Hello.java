@@ -54,13 +54,4 @@ public class Hello {
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
-
-    @Override
-    public String toString() {
-        return "Hello{" +
-                "id=" + id +
-                ", createTime=" + createTime +
-                ", modifyTime=" + modifyTime +
-                '}';
-    }
 }

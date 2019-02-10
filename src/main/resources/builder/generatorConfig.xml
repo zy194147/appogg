@@ -44,7 +44,7 @@
         <!--</table>-->
         <!--<table tableName="gate_client" domainObjectName="GateClient">-->
         <!--</table>-->
-        <table tableName="hello" domainObjectName="Hello">
+        <table tableName="ogg_user" domainObjectName="OggUser">
         </table>
     </context>
 </generatorConfiguration>
