@@ -62,4 +62,25 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper,OggArticle> {
 
         return new TableResultResponse<>(result.getTotal(),articleList);
     }
+
+    public ObjectRestResponse selectArticleDetail(Query query){
+
+        int articleId = 0;
+        OggArticle article = null;
+        Example example = new Example(OggArticle.class);
+        if (query.entrySet().size() > 0) {
+            Example.Criteria criteria = example.createCriteria();
+            for (Map.Entry<String, Object> entry : query.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
+                    if ("id".equals(entry.getKey())) {
+                        articleId = Integer.parseInt(entry.getValue().toString());
+                    }
+                }
+            }
+            if(articleId != 0){
+                article = this.mapper.selectByPrimaryKey(articleId);
+            }
+        }
+        return new ObjectRestResponse().rel(true).data(article);
+    }
 }

@@ -7,10 +7,7 @@ import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.rest.BaseController;
 import com.appogg.website.util.Query;
 import com.appogg.website.vo.article.ArticleVo;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -19,14 +16,20 @@ import java.util.Map;
 public class OggArticleController extends BaseController<OggArticleBiz,OggArticle> {
 
 
-    @RequestMapping("add")
+    @PostMapping("add")
     public ObjectRestResponse insertArticle(@RequestBody ArticleVo articleVo){
         return this.baseBiz.insertArticleMsg(articleVo);
     }
 
-    @RequestMapping("list")
+    @GetMapping("list")
     public TableResultResponse listPublicArticle(@RequestParam Map<String,Object> params){
         Query query = new Query(params);
         return this.baseBiz.listPublicArticleMsg(query);
+    }
+
+    @GetMapping("detail")
+    public ObjectRestResponse selectArticleDetail(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return  this.baseBiz.selectArticleDetail(query);
     }
 }
