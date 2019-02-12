@@ -72,6 +72,18 @@ public class OggUser {
     private Date createDateTime;
 
     /**
+     * 文章总数
+     */
+    @Column(name = "article_num")
+    private Integer articleNum;
+
+    /**
+     * 文章总总阅读量
+     */
+    @Column(name = "article_read_num")
+    private Integer articleReadNum;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -287,5 +299,41 @@ public class OggUser {
      */
     public void setCreateDateTime(Date createDateTime) {
         this.createDateTime = createDateTime;
+    }
+
+    /**
+     * 获取文章总数
+     *
+     * @return article_num - 文章总数
+     */
+    public Integer getArticleNum() {
+        return articleNum;
+    }
+
+    /**
+     * 设置文章总数
+     *
+     * @param articleNum 文章总数
+     */
+    public void setArticleNum(Integer articleNum) {
+        this.articleNum = articleNum;
+    }
+
+    /**
+     * 获取文章总总阅读量
+     *
+     * @return article_read_num - 文章总总阅读量
+     */
+    public Integer getArticleReadNum() {
+        return articleReadNum;
+    }
+
+    /**
+     * 设置文章总总阅读量
+     *
+     * @param articleReadNum 文章总总阅读量
+     */
+    public void setArticleReadNum(Integer articleReadNum) {
+        this.articleReadNum = articleReadNum;
     }
 }

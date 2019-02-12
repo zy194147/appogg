@@ -18,5 +18,7 @@
     <result column="user_page_icon" property="userPageIcon" jdbcType="VARCHAR" />
     <result column="is_destroy" property="isDestroy" jdbcType="TINYINT" />
     <result column="create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
+    <result column="article_num" property="articleNum" jdbcType="INTEGER" />
+    <result column="article_read_num" property="articleReadNum" jdbcType="INTEGER" />
   </resultMap>
 </mapper>

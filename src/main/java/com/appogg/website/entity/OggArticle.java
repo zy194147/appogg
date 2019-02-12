@@ -50,11 +50,17 @@ public class OggArticle {
     @Column(name = "create_user_id")
     private Integer createUserId;
 
+    @Column(name = "create_user_name")
+    private String createUserName;
+
     /**
      * 文章最近一次修改者
      */
-    @Column(name = "modiry_user_id")
-    private Integer modiryUserId;
+    @Column(name = "modify_user_id")
+    private Integer modifyUserId;
+
+    @Column(name = "modify_user_name")
+    private String modifyUserName;
 
     /**
      * 删除状态：”0“未删除，”1“已删除
@@ -255,21 +261,49 @@ public class OggArticle {
     }
 
     /**
+     * @return create_user_name
+     */
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    /**
+     * @param createUserName
+     */
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+    /**
      * 获取文章最近一次修改者
      *
-     * @return modiry_user_id - 文章最近一次修改者
+     * @return modify_user_id - 文章最近一次修改者
      */
-    public Integer getModiryUserId() {
-        return modiryUserId;
+    public Integer getModifyUserId() {
+        return modifyUserId;
     }
 
     /**
      * 设置文章最近一次修改者
      *
-     * @param modiryUserId 文章最近一次修改者
+     * @param modifyUserId 文章最近一次修改者
      */
-    public void setModiryUserId(Integer modiryUserId) {
-        this.modiryUserId = modiryUserId;
+    public void setModifyUserId(Integer modifyUserId) {
+        this.modifyUserId = modifyUserId;
+    }
+
+    /**
+     * @return modify_user_name
+     */
+    public String getModifyUserName() {
+        return modifyUserName;
+    }
+
+    /**
+     * @param modifyUserName
+     */
+    public void setModifyUserName(String modifyUserName) {
+        this.modifyUserName = modifyUserName;
     }
 
     /**

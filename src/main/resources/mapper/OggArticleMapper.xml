@@ -14,7 +14,9 @@
     <result column="article_classify_group" property="articleClassifyGroup" jdbcType="VARCHAR" />
     <result column="article_summary" property="articleSummary" jdbcType="VARCHAR" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
-    <result column="modiry_user_id" property="modiryUserId" jdbcType="INTEGER" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="modify_user_name" property="modifyUserName" jdbcType="VARCHAR" />
     <result column="is_delete" property="isDelete" jdbcType="TINYINT" />
     <result column="read_num" property="readNum" jdbcType="INTEGER" />
     <result column="comment_num" property="commentNum" jdbcType="INTEGER" />
