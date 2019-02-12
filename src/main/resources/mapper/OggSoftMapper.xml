@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.appogg.website.mapper.OggSoftMapper" >
+  <resultMap id="BaseResultMap" type="com.appogg.website.entity.OggSoft" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="soft_title_name" property="softTitleName" jdbcType="VARCHAR" />
+    <result column="soft_title_icon" property="softTitleIcon" jdbcType="VARCHAR" />
+    <result column="create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
+    <result column="modify_date_time" property="modifyDateTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="modify_user_name" property="modifyUserName" jdbcType="VARCHAR" />
+    <result column="soft_auth_id" property="softAuthId" jdbcType="INTEGER" />
+    <result column="soft_classify_group" property="softClassifyGroup" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+    <result column="read_num" property="readNum" jdbcType="INTEGER" />
+    <result column="comment_num" property="commentNum" jdbcType="INTEGER" />
+    <result column="is_sticky" property="isSticky" jdbcType="TINYINT" />
+    <result column="if_fine" property="ifFine" jdbcType="TINYINT" />
+    <result column="helpful_num" property="helpfulNum" jdbcType="INTEGER" />
+    <result column="unhelpful_num" property="unhelpfulNum" jdbcType="INTEGER" />
+    <result column="soft_system_platform" property="softSystemPlatform" jdbcType="VARCHAR" />
+    <result column="soft_content" property="softContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+</mapper>
