@@ -35,6 +35,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         System.out.println("拦截.........");
         String redisToken = redisUtils.get("token");
         System.out.println("redis.....token....:" + redisToken);
+        redisUtils.delete("token");
         String token = httpServletRequest.getHeader("Authorization");// 从 http 请求头中取出 token
         System.out.println("拦截...token...." + token);
 
@@ -60,9 +61,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     throw new RuntimeException("无token，请重新登录");
                 }
                 // 获取 token 中的 user id
-                String userId;
+                int userId;
                 try {
-                    userId = JWT.decode(token).getAudience().get(0);
+                    userId = Integer.parseInt(JWT.decode(token).getAudience().get(0));
+                    System.out.println("userId:" + userId);
                 } catch (JWTDecodeException j) {
                     throw new RuntimeException("401");
                 }
