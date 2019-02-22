@@ -9,3 +9,16 @@ spring:
 
 server:
     port: 8080
+
+mybatis:
+    basepackage: com.appogg.website.mapper
+    xmlLocation: classpath:mapper/**/*.xml
+    mapper-locations: "classpath*:mapper/*.xml"
+
+#redis-cache 相关
+redis:
+  cluster:
+    nodes: 127.0.0.1:7000
+    # 服务或应用名
+  enable: true
+  database: 0

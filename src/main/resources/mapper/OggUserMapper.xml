@@ -21,4 +21,10 @@
     <result column="article_num" property="articleNum" jdbcType="INTEGER" />
     <result column="article_read_num" property="articleReadNum" jdbcType="INTEGER" />
   </resultMap>
+
+  <select id="selectByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id,user_name,user_email,user_password,member_level_id,member_level_name,user_city,user_sex,
+    user_introduce,user_head_icon,user_page_icon,is_destroy,create_date_time,article_num,article_read_num from ogg_user where user_name=#{userName}
+
+  </select>
 </mapper>

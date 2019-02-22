@@ -1,5 +1,6 @@
 package com.appogg.website.controller.article;
 
+import com.appogg.website.annotation.UserLoginToken;
 import com.appogg.website.biz.article.OggArticleBiz;
 import com.appogg.website.entity.OggArticle;
 import com.appogg.website.msg.ObjectRestResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
+
 @RequestMapping("/article/")
 public class OggArticleController extends BaseController<OggArticleBiz,OggArticle> {
 
@@ -27,7 +29,7 @@ public class OggArticleController extends BaseController<OggArticleBiz,OggArticl
         Query query = new Query(params);
         return this.baseBiz.listPublicArticleMsg(query);
     }
-
+    @UserLoginToken
     @GetMapping("detail")
     public ObjectRestResponse selectArticleDetail(@RequestParam Map<String,Object> params){
         Query query = new Query(params);

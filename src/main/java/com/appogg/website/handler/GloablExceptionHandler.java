@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @ControllerAdvice("com.github.wxiaoqi.security")
 @ResponseBody
-public class GlobalExceptionHandler {
-    private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+public class GloablExceptionHandler {
+    private Logger logger = LoggerFactory.getLogger(GloablExceptionHandler.class);
 
     @ExceptionHandler(ClientTokenException.class)
     public BaseResponse clientTokenExceptionHandler(HttpServletResponse response, ClientTokenException ex) {

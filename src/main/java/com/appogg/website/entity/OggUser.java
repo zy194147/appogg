@@ -1,10 +1,11 @@
 package com.appogg.website.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "ogg_user")
-public class OggUser {
+public class OggUser implements Serializable {
     @Id
     private Integer id;
 
@@ -334,6 +335,29 @@ public class OggUser {
      * @param articleReadNum 文章总总阅读量
      */
     public void setArticleReadNum(Integer articleReadNum) {
+
+
         this.articleReadNum = articleReadNum;
+    }
+
+    @Override
+    public String toString() {
+        return "OggUser{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", memberLevelId='" + memberLevelId + '\'' +
+                ", memberLevelName='" + memberLevelName + '\'' +
+                ", userCity='" + userCity + '\'' +
+                ", userSex=" + userSex +
+                ", userIntroduce='" + userIntroduce + '\'' +
+                ", userHeadIcon='" + userHeadIcon + '\'' +
+                ", userPageIcon='" + userPageIcon + '\'' +
+                ", isDestroy=" + isDestroy +
+                ", createDateTime=" + createDateTime +
+                ", articleNum=" + articleNum +
+                ", articleReadNum=" + articleReadNum +
+                '}';
     }
 }
