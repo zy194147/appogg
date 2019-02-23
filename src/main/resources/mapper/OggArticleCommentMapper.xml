@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.appogg.website.mapper.OggArticleCommentMapper" >
+  <resultMap id="BaseResultMap" type="com.appogg.website.entity.OggArticleComment" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
+    <result column="modify_date_time" property="modifyDateTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="modify_user_name" property="modifyUserName" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+    <result column="is_sticky" property="isSticky" jdbcType="TINYINT" />
+    <result column="helpful_num" property="helpfulNum" jdbcType="INTEGER" />
+    <result column="unhelpful_num" property="unhelpfulNum" jdbcType="INTEGER" />
+    <result column="comment_article_id" property="commentArticleId" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="back_to_user_id" property="backToUserId" jdbcType="INTEGER" />
+    <result column="back_to_user_name" property="backToUserName" jdbcType="VARCHAR" />
+    <result column="comment_content" property="commentContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+</mapper>

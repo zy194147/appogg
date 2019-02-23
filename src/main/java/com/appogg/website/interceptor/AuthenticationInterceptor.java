@@ -33,11 +33,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
         System.out.println("拦截.........");
-        String redisToken = redisUtils.get("token");
-        System.out.println("redis.....token....:" + redisToken);
-        redisUtils.delete("token");
+//        String redisToken = redisUtils.get("token");
         String token = httpServletRequest.getHeader("Authorization");// 从 http 请求头中取出 token
-        System.out.println("拦截...token...." + token);
 
         // 如果不是映射到方法直接通过
         if(!(object instanceof HandlerMethod)){
@@ -74,12 +71,23 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     throw new RuntimeException("用户不存在，请重新登录");
                 }
                 // 验证 token
+
+                String redisToken = redisUtils.get(token);
+                if(redisToken == null){
+                    throw new RuntimeException("401");
+                }
+
                 JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getUserPassword())).build();
                 try {
                     jwtVerifier.verify(token);
                 } catch (JWTVerificationException e) {
                     throw new RuntimeException("401");
                 }
+
+//                System.out.println("redis.....token....:" + redisToken);
+
+//                System.out.println("拦截...token...." + token);
+
                 return true;
             }
         }

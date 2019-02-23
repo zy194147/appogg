@@ -14,11 +14,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-
 @RequestMapping("/article/")
 public class OggArticleController extends BaseController<OggArticleBiz,OggArticle> {
 
 
+    /**
+     * 需要登录才能发文章
+     * @param articleVo
+     * @return
+     */
+    @UserLoginToken
     @PostMapping("add")
     public ObjectRestResponse insertArticle(@RequestBody ArticleVo articleVo){
         return this.baseBiz.insertArticleMsg(articleVo);
@@ -29,10 +34,14 @@ public class OggArticleController extends BaseController<OggArticleBiz,OggArticl
         Query query = new Query(params);
         return this.baseBiz.listPublicArticleMsg(query);
     }
-    @UserLoginToken
     @GetMapping("detail")
     public ObjectRestResponse selectArticleDetail(@RequestParam Map<String,Object> params){
         Query query = new Query(params);
         return  this.baseBiz.selectArticleDetail(query);
+    }
+    @GetMapping("updateReadNum")
+    public ObjectRestResponse uploadArticleReadNum(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return  this.baseBiz.updateArticleReadNum(query);
     }
 }

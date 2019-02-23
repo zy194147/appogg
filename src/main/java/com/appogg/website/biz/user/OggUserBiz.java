@@ -10,12 +10,15 @@ import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.util.Query;
 import com.appogg.website.util.RedisUtils;
 import com.appogg.website.util.SerializeUtils;
+import com.appogg.website.vo.user.UserVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
@@ -63,10 +66,21 @@ public class OggUserBiz extends BaseBiz<OggUserMapper,OggUser> {
             }
         }
     }
+    public ObjectRestResponse userLogout(HttpServletRequest request){
+        String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
+        String userObject = redisUtils.get(token);
+        if(userObject == null){
+            throw new RuntimeException("退出登录失败，用户token不存在");
+        }
+        redisUtils.delete(token);
+        return new ObjectRestResponse().data("ok");
+
+    }
 
     public ObjectRestResponse selectUserDetail(Query query){
         int userId = 0;
         OggUser user = null;
+        UserVO userVO = new UserVO();
         Example example = new Example(OggUser.class);
         if (query.entrySet().size() > 0) {
             Example.Criteria criteria = example.createCriteria();
@@ -79,9 +93,21 @@ public class OggUserBiz extends BaseBiz<OggUserMapper,OggUser> {
             }
             if(userId != 0){
                 user = this.mapper.selectByPrimaryKey(userId);
+                userVO.setId(user.getId());
+                userVO.setUserName(user.getUserName());
+                userVO.setMemberLevelId(user.getMemberLevelId());
+                userVO.setMemberLevelName(user.getMemberLevelName());
+                userVO.setUserCity(user.getUserCity());
+                userVO.setUserSex(user.getUserSex());
+                userVO.setUserIntroduce(user.getUserIntroduce());
+                userVO.setUserHeadIcon(user.getUserHeadIcon());
+                userVO.setUserPageIcon(user.getUserPageIcon());
+                userVO.setCreateDateTime(user.getCreateDateTime());
+                userVO.setArticleNum(user.getArticleNum());
+                userVO.setArticleReadNum(user.getArticleReadNum());
             }
         }
-        return new ObjectRestResponse().rel(true).data(user);
+        return new ObjectRestResponse().rel(true).data(userVO);
     }
 
 }

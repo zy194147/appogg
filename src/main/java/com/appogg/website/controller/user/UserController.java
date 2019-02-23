@@ -11,6 +11,7 @@ import com.appogg.website.util.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -23,6 +24,14 @@ public class UserController extends BaseController<OggUserBiz,OggUser> {
 
         return this.baseBiz.userLogin(user);
     }
+    //登出
+    @GetMapping("/logout")
+    public ObjectRestResponse logout(HttpServletRequest request){
+
+
+        System.out.println("deng出");
+        return this.baseBiz.userLogout(request);
+    }
 
     @UserLoginToken
     @GetMapping("/getMessage")
@@ -32,6 +41,7 @@ public class UserController extends BaseController<OggUserBiz,OggUser> {
 
     @RequestMapping("detail")
     public ObjectRestResponse userDetail(@RequestParam Map<String,Object> params){
+        System.out.println("userddddddddddddddddddd");
         Query query = new Query(params);
         return this.baseBiz.selectUserDetail(query);
 
