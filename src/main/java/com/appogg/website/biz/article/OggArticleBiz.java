@@ -5,14 +5,21 @@ import com.appogg.website.entity.OggArticle;
 import com.appogg.website.mapper.OggArticleMapper;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
+import com.appogg.website.util.EntityUtils;
 import com.appogg.website.util.Query;
 import com.appogg.website.vo.article.ArticleVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.*;
 
 @Service
@@ -102,5 +109,38 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper,OggArticle> {
             }
         }
         return new ObjectRestResponse().rel(true).data("ok");
+    }
+
+
+    public ObjectRestResponse uploadArticleTitleImage(HttpServletRequest request, MultipartFile multipartFile){
+        String fileName = multipartFile.getOriginalFilename();
+        String fileType = StringUtils.substringAfter(fileName, ".");
+
+        String imageSrc = null;
+
+
+        if (!multipartFile.isEmpty()) {
+            try {
+                // 文件保存路径
+                String filePath = "F:\\appogg\\uploadTitleImage\\" + "upload\\"
+                        + multipartFile.getOriginalFilename();
+                // 转存文件
+                System.out.println("...path:" + filePath);
+                multipartFile.transferTo(new File(filePath));
+                File file = new File(filePath);
+                InputStream in = new FileInputStream(file);
+                byte[] bytes=new byte[(int)file.length()];
+                in.read(bytes);
+                String base64String =  Base64.getEncoder().encodeToString(bytes);
+
+                System.out.println("data:image/jpeg;base64," + base64String);
+
+                imageSrc = "data:image/jpeg;base64," + base64String;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("name:" + fileName + "type:" + fileType);
+        return new ObjectRestResponse().data(imageSrc);
     }
 }

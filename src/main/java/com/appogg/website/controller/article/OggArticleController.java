@@ -9,8 +9,10 @@ import com.appogg.website.rest.BaseController;
 import com.appogg.website.util.Query;
 import com.appogg.website.vo.article.ArticleVo;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -44,4 +46,11 @@ public class OggArticleController extends BaseController<OggArticleBiz,OggArticl
         Query query = new Query(params);
         return  this.baseBiz.updateArticleReadNum(query);
     }
+
+    @PostMapping("uploadTitleImage")
+    public ObjectRestResponse uploadArticleTitleImage(HttpServletRequest request, @RequestParam("file") MultipartFile multipartFile){
+        return  this.baseBiz.uploadArticleTitleImage(request, multipartFile);
+    }
+
+
 }
