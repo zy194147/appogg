@@ -3,8 +3,10 @@ package com.appogg.website.biz.article;
 import com.appogg.website.biz.BaseBiz;
 import com.appogg.website.entity.OggArticleComment;
 import com.appogg.website.mapper.OggArticleCommentMapper;
+import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.util.Query;
+import com.appogg.website.vo.article.ArticleCommentVO;
 import com.appogg.website.vo.comment.CommentTree;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -46,6 +48,31 @@ public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper,OggArt
 
 
 
+    public ObjectRestResponse insertArticleComment(ArticleCommentVO commentVO){
+
+        OggArticleComment articleComment = new OggArticleComment();
+        articleComment.setCreateUserId(1);
+        articleComment.setCreateUserName("zhangyj");
+        articleComment.setModifyUserId(1);
+        articleComment.setModifyUserName("zhangyj");
+        articleComment.setCommentContent(commentVO.getCommentContent());
+        articleComment.setIsDelete(new Byte((byte)0));
+        articleComment.setIsSticky(new Byte((byte)0));
+        articleComment.setHelpfulNum(0);
+        articleComment.setUnhelpfulNum(0);
+        articleComment.setCommentArticleId(commentVO.getCommentArticleId());
+        articleComment.setParentId(0);
+        articleComment.setPath(",1");
+        articleComment.setBackToUserId(0);
+        articleComment.setBackToUserName(null);
+
+        this.mapper.insertSelective(articleComment);
+        return new ObjectRestResponse().data("ok");
+
+
+    }
+
+
 
     private List<CommentTree> getCommentTreeList(List<OggArticleComment> commentList){
         List<CommentTree> treeNodeList = new ArrayList<>();
@@ -77,4 +104,8 @@ public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper,OggArt
         }
         return treeNodeList;
     }
+
+
+
+
 }

@@ -3,12 +3,12 @@ package com.appogg.website.controller.article;
 
 import com.appogg.website.biz.article.OggArticleCommentBiz;
 import com.appogg.website.entity.OggArticleComment;
+import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.rest.BaseController;
 import com.appogg.website.util.Query;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.appogg.website.vo.article.ArticleCommentVO;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -21,6 +21,11 @@ public class OggArticleCommentController extends BaseController<OggArticleCommen
         Query query = new Query(params);
         System.out.println("commti.");
         return this.baseBiz.selectCommentByQuery(query);
+    }
+    @PostMapping("add")
+    public ObjectRestResponse addCommentByArticleId(@RequestBody ArticleCommentVO commentVO){
+        System.out.println("dslj...................");
+        return this.baseBiz.insertArticleComment(commentVO);
     }
 
 }
