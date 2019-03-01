@@ -38,8 +38,8 @@ public class OggNeedAnswer {
     @Column(name = "unhelpful_num")
     private Integer unhelpfulNum;
 
-    @Column(name = "comment_need_id")
-    private Integer commentNeedId;
+    @Column(name = "answer_need_id")
+    private Integer answerNeedId;
 
     @Column(name = "parent_id")
     private Integer parentId;
@@ -64,8 +64,8 @@ public class OggNeedAnswer {
     @Column(name = "is_enable")
     private Byte isEnable;
 
-    @Column(name = "comment_content")
-    private String commentContent;
+    @Column(name = "answer_content")
+    private String answerContent;
 
     /**
      * @return id
@@ -222,17 +222,17 @@ public class OggNeedAnswer {
     }
 
     /**
-     * @return comment_need_id
+     * @return answer_need_id
      */
-    public Integer getCommentNeedId() {
-        return commentNeedId;
+    public Integer getAnswerNeedId() {
+        return answerNeedId;
     }
 
     /**
-     * @param commentNeedId
+     * @param answerNeedId
      */
-    public void setCommentNeedId(Integer commentNeedId) {
-        this.commentNeedId = commentNeedId;
+    public void setAnswerNeedId(Integer answerNeedId) {
+        this.answerNeedId = answerNeedId;
     }
 
     /**
@@ -328,16 +328,16 @@ public class OggNeedAnswer {
     }
 
     /**
-     * @return comment_content
+     * @return answer_content
      */
-    public String getCommentContent() {
-        return commentContent;
+    public String getAnswerContent() {
+        return answerContent;
     }
 
     /**
-     * @param commentContent
+     * @param answerContent
      */
-    public void setCommentContent(String commentContent) {
-        this.commentContent = commentContent;
+    public void setAnswerContent(String answerContent) {
+        this.answerContent = answerContent;
     }
 }

@@ -16,13 +16,13 @@
     <result column="is_sticky" property="isSticky" jdbcType="TINYINT" />
     <result column="helpful_num" property="helpfulNum" jdbcType="INTEGER" />
     <result column="unhelpful_num" property="unhelpfulNum" jdbcType="INTEGER" />
-    <result column="comment_need_id" property="commentNeedId" jdbcType="INTEGER" />
+    <result column="answer_need_id" property="answerNeedId" jdbcType="INTEGER" />
     <result column="parent_id" property="parentId" jdbcType="INTEGER" />
     <result column="path" property="path" jdbcType="VARCHAR" />
     <result column="back_to_user_id" property="backToUserId" jdbcType="INTEGER" />
     <result column="back_to_user_name" property="backToUserName" jdbcType="VARCHAR" />
     <result column="is_adopt" property="isAdopt" jdbcType="TINYINT" />
     <result column="is_enable" property="isEnable" jdbcType="TINYINT" />
-    <result column="comment_content" property="commentContent" jdbcType="LONGVARCHAR" />
+    <result column="answer_content" property="answerContent" jdbcType="LONGVARCHAR" />
   </resultMap>
 </mapper>

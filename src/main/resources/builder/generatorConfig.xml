@@ -45,7 +45,7 @@
         <!--<table tableName="gate_client" domainObjectName="GateClient">-->
         <!--</table>-->
         <!--<table tableName="ogg_soft" domainObjectName="OggSoft"></table>-->
-        <table tableName="ogg_need" domainObjectName="OggNeed"></table>
+        <table tableName="ogg_need_answer" domainObjectName="OggNeedAnswer"></table>
 
     </context>
 </generatorConfiguration>
