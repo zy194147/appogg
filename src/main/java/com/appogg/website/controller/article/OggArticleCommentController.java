@@ -19,7 +19,6 @@ public class OggArticleCommentController extends BaseController<OggArticleCommen
     @RequestMapping("detail")
     public TableResultResponse selectCommentByArticleId(@RequestParam Map<String,Object> params){
         Query query = new Query(params);
-        System.out.println("commti.");
         return this.baseBiz.selectCommentByQuery(query);
     }
     @PostMapping("add")

@@ -3,8 +3,8 @@ package com.appogg.website.entity;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "ogg_need")
-public class OggNeed {
+@Table(name = "ogg_soft_comment")
+public class OggSoftComment {
     @Id
     private Integer id;
 
@@ -13,9 +13,6 @@ public class OggNeed {
 
     @Column(name = "modify_date_time")
     private Date modifyDateTime;
-
-    @Column(name = "need_title_name")
-    private String needTitleName;
 
     @Column(name = "create_user_id")
     private Integer createUserId;
@@ -29,20 +26,8 @@ public class OggNeed {
     @Column(name = "modify_user_name")
     private String modifyUserName;
 
-    @Column(name = "answer_num")
-    private Integer answerNum;
-
-    @Column(name = "is_solved")
-    private Byte isSolved;
-
-    @Column(name = "read_num")
-    private Integer readNum;
-
     @Column(name = "is_delete")
     private Byte isDelete;
-
-    @Column(name = "is_fine")
-    private Byte isFine;
 
     @Column(name = "is_sticky")
     private Byte isSticky;
@@ -53,11 +38,28 @@ public class OggNeed {
     @Column(name = "unhelpful_num")
     private Integer unhelpfulNum;
 
-    @Column(name = "need_classify_group")
-    private String needClassifyGroup;
+    @Column(name = "comment_soft_id")
+    private Integer commentSoftId;
 
-    @Column(name = "need_content")
-    private String needContent;
+    @Column(name = "parent_id")
+    private Integer parentId;
+
+    private String path;
+
+    /**
+     * 回复作者id
+     */
+    @Column(name = "back_to_user_id")
+    private Integer backToUserId;
+
+    /**
+     * 回复作者名称
+     */
+    @Column(name = "back_to_user_name")
+    private String backToUserName;
+
+    @Column(name = "comment_content")
+    private String commentContent;
 
     /**
      * @return id
@@ -99,20 +101,6 @@ public class OggNeed {
      */
     public void setModifyDateTime(Date modifyDateTime) {
         this.modifyDateTime = modifyDateTime;
-    }
-
-    /**
-     * @return need_title_name
-     */
-    public String getNeedTitleName() {
-        return needTitleName;
-    }
-
-    /**
-     * @param needTitleName
-     */
-    public void setNeedTitleName(String needTitleName) {
-        this.needTitleName = needTitleName;
     }
 
     /**
@@ -172,48 +160,6 @@ public class OggNeed {
     }
 
     /**
-     * @return answer_num
-     */
-    public Integer getAnswerNum() {
-        return answerNum;
-    }
-
-    /**
-     * @param answerNum
-     */
-    public void setAnswerNum(Integer answerNum) {
-        this.answerNum = answerNum;
-    }
-
-    /**
-     * @return is_solved
-     */
-    public Byte getIsSolved() {
-        return isSolved;
-    }
-
-    /**
-     * @param isSolved
-     */
-    public void setIsSolved(Byte isSolved) {
-        this.isSolved = isSolved;
-    }
-
-    /**
-     * @return read_num
-     */
-    public Integer getReadNum() {
-        return readNum;
-    }
-
-    /**
-     * @param readNum
-     */
-    public void setReadNum(Integer readNum) {
-        this.readNum = readNum;
-    }
-
-    /**
      * @return is_delete
      */
     public Byte getIsDelete() {
@@ -225,20 +171,6 @@ public class OggNeed {
      */
     public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
-    }
-
-    /**
-     * @return is_fine
-     */
-    public Byte getIsFine() {
-        return isFine;
-    }
-
-    /**
-     * @param isFine
-     */
-    public void setIsFine(Byte isFine) {
-        this.isFine = isFine;
     }
 
     /**
@@ -284,30 +216,94 @@ public class OggNeed {
     }
 
     /**
-     * @return need_classify_group
+     * @return comment_soft_id
      */
-    public String getNeedClassifyGroup() {
-        return needClassifyGroup;
+    public Integer getCommentSoftId() {
+        return commentSoftId;
     }
 
     /**
-     * @param needClassifyGroup
+     * @param commentSoftId
      */
-    public void setNeedClassifyGroup(String needClassifyGroup) {
-        this.needClassifyGroup = needClassifyGroup;
+    public void setCommentSoftId(Integer commentSoftId) {
+        this.commentSoftId = commentSoftId;
     }
 
     /**
-     * @return need_content
+     * @return parent_id
      */
-    public String getNeedContent() {
-        return needContent;
+    public Integer getParentId() {
+        return parentId;
     }
 
     /**
-     * @param needContent
+     * @param parentId
      */
-    public void setNeedContent(String needContent) {
-        this.needContent = needContent;
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
+    /**
+     * @return path
+     */
+    public String getPath() {
+        return path;
+    }
+
+    /**
+     * @param path
+     */
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    /**
+     * 获取回复作者id
+     *
+     * @return back_to_user_id - 回复作者id
+     */
+    public Integer getBackToUserId() {
+        return backToUserId;
+    }
+
+    /**
+     * 设置回复作者id
+     *
+     * @param backToUserId 回复作者id
+     */
+    public void setBackToUserId(Integer backToUserId) {
+        this.backToUserId = backToUserId;
+    }
+
+    /**
+     * 获取回复作者名称
+     *
+     * @return back_to_user_name - 回复作者名称
+     */
+    public String getBackToUserName() {
+        return backToUserName;
+    }
+
+    /**
+     * 设置回复作者名称
+     *
+     * @param backToUserName 回复作者名称
+     */
+    public void setBackToUserName(String backToUserName) {
+        this.backToUserName = backToUserName;
+    }
+
+    /**
+     * @return comment_content
+     */
+    public String getCommentContent() {
+        return commentContent;
+    }
+
+    /**
+     * @param commentContent
+     */
+    public void setCommentContent(String commentContent) {
+        this.commentContent = commentContent;
     }
 }

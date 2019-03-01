@@ -50,8 +50,8 @@ public class OggSoft {
     @Column(name = "is_sticky")
     private Byte isSticky;
 
-    @Column(name = "if_fine")
-    private Byte ifFine;
+    @Column(name = "is_fine")
+    private Byte isFine;
 
     @Column(name = "helpful_num")
     private Integer helpfulNum;
@@ -61,6 +61,9 @@ public class OggSoft {
 
     @Column(name = "soft_system_platform")
     private String softSystemPlatform;
+
+    @Column(name = "soft_download_addr")
+    private String softDownloadAddr;
 
     @Column(name = "soft_content")
     private String softContent;
@@ -276,17 +279,17 @@ public class OggSoft {
     }
 
     /**
-     * @return if_fine
+     * @return is_fine
      */
-    public Byte getIfFine() {
-        return ifFine;
+    public Byte getIsFine() {
+        return isFine;
     }
 
     /**
-     * @param ifFine
+     * @param isFine
      */
-    public void setIfFine(Byte ifFine) {
-        this.ifFine = ifFine;
+    public void setIsFine(Byte isFine) {
+        this.isFine = isFine;
     }
 
     /**
@@ -329,6 +332,20 @@ public class OggSoft {
      */
     public void setSoftSystemPlatform(String softSystemPlatform) {
         this.softSystemPlatform = softSystemPlatform;
+    }
+
+    /**
+     * @return soft_download_addr
+     */
+    public String getSoftDownloadAddr() {
+        return softDownloadAddr;
+    }
+
+    /**
+     * @param softDownloadAddr
+     */
+    public void setSoftDownloadAddr(String softDownloadAddr) {
+        this.softDownloadAddr = softDownloadAddr;
     }
 
     /**

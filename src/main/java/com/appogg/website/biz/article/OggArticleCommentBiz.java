@@ -15,6 +15,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,8 @@ public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper,OggArt
         OggArticleComment articleComment = new OggArticleComment();
         articleComment.setCreateUserId(1);
         articleComment.setCreateUserName("zhangyj");
+        articleComment.setCreateDateTime(new Date());
+        articleComment.setModifyDateTime(new Date());
         articleComment.setModifyUserId(1);
         articleComment.setModifyUserName("zhangyj");
         articleComment.setCommentContent(commentVO.getCommentContent());

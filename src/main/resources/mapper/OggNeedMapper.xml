@@ -21,6 +21,7 @@
     <result column="is_sticky" property="isSticky" jdbcType="TINYINT" />
     <result column="helpful_num" property="helpfulNum" jdbcType="INTEGER" />
     <result column="unhelpful_num" property="unhelpfulNum" jdbcType="INTEGER" />
+    <result column="need_classify_group" property="needClassifyGroup" jdbcType="VARCHAR" />
     <result column="need_content" property="needContent" jdbcType="LONGVARCHAR" />
   </resultMap>
 </mapper>
