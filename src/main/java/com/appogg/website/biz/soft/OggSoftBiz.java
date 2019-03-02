@@ -54,6 +54,7 @@ public class OggSoftBiz extends BaseBiz<OggSoftMapper, OggSoft> {
     public TableResultResponse listPublicSoftMsg(Query query){
 
         List<OggSoft> softList ;
+        List<SoftVO> softVOList ;
         Page result = PageHelper.startPage(query.getPage(),query.getLimit());
 
         Example example = new Example(OggSoft.class);
