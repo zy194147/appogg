@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/soft")
+@RequestMapping("/soft/")
 public class OggSoftController extends BaseController<OggSoftBiz,OggSoft> {
 
     @UserLoginToken
@@ -26,6 +26,14 @@ public class OggSoftController extends BaseController<OggSoftBiz,OggSoft> {
     public TableResultResponse listSoft(@RequestParam Map<String,Object> params){
         Query query = new Query(params);
         return this.baseBiz.listPublicSoftMsg(query);
+    }
+
+    @GetMapping("trendingList")
+    public TableResultResponse listTrendingSoft(@RequestParam Map<String,Object> params){
+
+        System.out.println("sdfkjasdflkj............");
+        Query query = new Query(params);
+        return this.baseBiz.listTrendingSoftMsg(query);
     }
 
 

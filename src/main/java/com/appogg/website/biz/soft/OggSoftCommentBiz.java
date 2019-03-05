@@ -32,6 +32,8 @@ public class OggSoftCommentBiz extends BaseBiz<OggSoftCommentMapper, OggSoftComm
                 criteria.andEqualTo(entry.getKey(), entry.getValue());
             }
         }
+
+        // 分页
         Page<Object> result = PageHelper.startPage(query.getPage(), query.getLimit());
         List<OggSoftComment> list = mapper.selectByExample(example);
         return new TableResultResponse<OggSoftComment>(result.getTotal(), list);
