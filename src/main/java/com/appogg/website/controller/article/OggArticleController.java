@@ -36,6 +36,18 @@ public class OggArticleController extends BaseController<OggArticleBiz,OggArticl
         Query query = new Query(params);
         return this.baseBiz.listPublicArticleMsg(query);
     }
+    @GetMapping("trendingList")
+    public TableResultResponse listTrendingSoft(@RequestParam Map<String,Object> params){
+
+        Query query = new Query(params);
+        return this.baseBiz.listTrendingArticleMsg(query);
+    }
+    @GetMapping("authorTrending")
+    public TableResultResponse listAuthorTrendingSoft(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return this.baseBiz.listAuthorTrendingArticle(query);
+    }
+
     @GetMapping("detail")
     public ObjectRestResponse selectArticleDetail(@RequestParam Map<String,Object> params){
         Query query = new Query(params);

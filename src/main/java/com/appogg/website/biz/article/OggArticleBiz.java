@@ -68,6 +68,60 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper,OggArticle> {
         return new TableResultResponse<>(result.getTotal(),articleList);
     }
 
+
+
+    public TableResultResponse listTrendingArticleMsg(Query query) {
+
+        List<OggArticle> articleList;
+        List<ArticleVo> articleListVOList = new ArrayList<>();
+        Page result = PageHelper.startPage(query.getPage(), query.getLimit());
+        Example example = new Example(OggArticle.class);
+        if (query.entrySet().size() > 0) {
+            Example.Criteria criteria = example.createCriteria();
+            for (Map.Entry<String, Object> entry : query.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
+                    if ("createUserId".equals(entry.getKey())) {
+                        criteria.andEqualTo("createUserId",Integer.parseInt(entry.getValue().toString()));
+                    }
+                }
+            }
+            articleList = this.mapper.selectByExample(example);
+        } else {
+            articleList = this.mapper.selectAll();
+        }
+        example.setOrderByClause("comment_num desc");
+        for(OggArticle article:articleList){
+            ArticleVo articleVo = new ArticleVo();
+            articleVo.setId(article.getId());
+            articleVo.setCreateUserId(article.getCreateUserId());
+            articleVo.setArticleTitleName(article.getArticleTitleName());
+            articleVo.setCommentNum(article.getCommentNum());
+            articleListVOList.add(articleVo);
+        }
+        return new TableResultResponse<>(result.getTotal(), articleListVOList);
+    }
+
+
+    public TableResultResponse listAuthorTrendingArticle(Query query) {
+
+        List<OggArticle> articleList;
+        List<ArticleVo> articleListVOList = new ArrayList<>();
+        Page result = PageHelper.startPage(query.getPage(), query.getLimit());
+        Example example = new Example(OggArticle.class);
+        example.setOrderByClause("comment_num desc");
+        articleList = this.mapper.selectByExample(example);
+        for(OggArticle article:articleList){
+            ArticleVo articleVo = new ArticleVo();
+            articleVo.setId(article.getId());
+            articleVo.setCreateUserId(article.getCreateUserId());
+            articleVo.setArticleTitleName(article.getArticleTitleName());
+            articleVo.setCommentNum(article.getCommentNum());
+            articleListVOList.add(articleVo);
+        }
+        return new TableResultResponse<>(result.getTotal(), articleListVOList);
+    }
+
+
     public ObjectRestResponse selectArticleDetail(Query query){
 
         int articleId = 0;

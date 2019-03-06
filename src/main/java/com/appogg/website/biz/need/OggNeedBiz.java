@@ -13,10 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -57,8 +54,10 @@ public class OggNeedBiz extends BaseBiz<OggNeedMapper,OggNeed> {
             for (Map.Entry<String, Object> entry : query.entrySet()) {
                 if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
                     if ("isSolved".equals(entry.getKey())) {
-                        System.out.println(".sdfslfkj...");
                         criteria.andEqualTo("isSolved",entry.getValue());
+                    }
+                    if ("createUserId".equals(entry.getKey())) {
+                        criteria.andEqualTo("createUserId",1);
                     }
                 }
             }
@@ -68,6 +67,40 @@ public class OggNeedBiz extends BaseBiz<OggNeedMapper,OggNeed> {
         }
 
         return new TableResultResponse<>(result.getTotal(),needList);
+    }
+
+
+    public TableResultResponse listTrendingNeedMsg(Query query) {
+
+        List<OggNeed> needList;
+        List<NeedVo> needListVOList = new ArrayList<>();
+        Page result = PageHelper.startPage(query.getPage(), query.getLimit());
+        Example example = new Example(OggNeed.class);
+
+        if (query.entrySet().size() > 0) {
+            Example.Criteria criteria = example.createCriteria();
+            for (Map.Entry<String, Object> entry : query.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
+                    if ("needUserId".equals(entry.getKey())) {
+                        criteria.andEqualTo("needUserId",1);
+                    }
+                }
+            }
+            needList = this.mapper.selectByExample(example);
+        } else {
+            needList = this.mapper.selectAll();
+        }
+        example.setOrderByClause("answer_num desc");
+//        needList = this.mapper.selectByExample(example);
+        for(OggNeed need:needList){
+            NeedVo needVo = new NeedVo();
+            needVo.setNeedTitleName(need.getNeedTitleName());
+            needVo.setId(need.getId());
+            needVo.setAnswerNum(need.getAnswerNum());
+            needVo.setNeedUserId(need.getCreateUserId());
+            needListVOList.add(needVo);
+        }
+        return new TableResultResponse<>(result.getTotal(), needListVOList);
     }
 
     public ObjectRestResponse selectNeedDetail(Query query){

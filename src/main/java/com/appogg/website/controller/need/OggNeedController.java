@@ -27,6 +27,12 @@ public class OggNeedController extends BaseController<OggNeedBiz,OggNeed> {
         Query query = new Query(params);
         return this.baseBiz.listPublicNeedMsg(query);
     }
+    @GetMapping("trendingList")
+    public TableResultResponse listTrendingSoft(@RequestParam Map<String,Object> params){
+
+        Query query = new Query(params);
+        return this.baseBiz.listTrendingNeedMsg(query);
+    }
     @GetMapping("detail")
     public ObjectRestResponse selectNeedDetail(@RequestParam Map<String,Object> params){
         Query query = new Query(params);

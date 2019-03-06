@@ -1,6 +1,8 @@
 package com.appogg.website.vo.article;
 
 public class ArticleVo {
+    private int id;
+    private int createUserId;
 
     private String articleTitleIcon;
     private String articleTitleName;
@@ -8,6 +10,32 @@ public class ArticleVo {
     private String[] articleClassifyGroup;
     private String articleSummary;
     private String articleContent;
+
+    private int commentNum;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(int createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public int getCommentNum() {
+        return commentNum;
+    }
+
+    public void setCommentNum(int commentNum) {
+        this.commentNum = commentNum;
+    }
 
     public String getArticleTitleIcon() {
         return articleTitleIcon;
