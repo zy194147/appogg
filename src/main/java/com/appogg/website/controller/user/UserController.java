@@ -33,6 +33,13 @@ public class UserController extends BaseController<OggUserBiz,OggUser> {
         return this.baseBiz.userLogout(request);
     }
 
+
+    //注册
+    @PostMapping("/signUp")
+    public ObjectRestResponse signUp(@RequestBody OggUser user){
+        return this.baseBiz.userSignUp(user);
+    }
+
     @UserLoginToken
     @GetMapping("/getMessage")
     public String getMessage(){

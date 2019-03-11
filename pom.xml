@@ -89,15 +89,10 @@
             <version>3.0</version>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>com.github.pagehelper</groupId>-->
-            <!--<artifactId>pagehelper-spring-boot-starter</artifactId>-->
-            <!--<version>1.2.5</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>5.1.0</version>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.5</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <!--<dependency>-->
