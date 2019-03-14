@@ -61,6 +61,7 @@ public class OggNeedBiz extends BaseBiz<OggNeedMapper,OggNeed> {
                     }
                 }
             }
+            example.setOrderByClause("is_solved desc");
             needList = this.mapper.selectByExample(example);
         } else {
             needList = this.mapper.selectAll();
