@@ -6,6 +6,7 @@ import com.appogg.website.mapper.OggNeedMapper;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.util.Query;
+import com.appogg.website.vo.need.NeedListVo;
 import com.appogg.website.vo.need.NeedVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -122,7 +123,24 @@ public class OggNeedBiz extends BaseBiz<OggNeedMapper,OggNeed> {
                 need = this.mapper.selectByPrimaryKey(needId);
             }
         }
-        return new ObjectRestResponse().rel(true).data(need);
+        NeedListVo needListVo = getNeedListVo(need);
+        return new ObjectRestResponse().rel(true).data(needListVo);
+    }
+
+    private NeedListVo getNeedListVo(OggNeed need){
+
+        NeedListVo needListVo = new NeedListVo();
+        needListVo.setId(need.getId());
+        needListVo.setCreateDateTime(need.getCreateDateTime());
+        needListVo.setCreateUserId(need.getCreateUserId());
+        needListVo.setCreateUserName(need.getCreateUserName());
+        needListVo.setIsSolved(need.getIsSolved());
+        needListVo.setNeedTitleName(need.getNeedTitleName());
+        needListVo.setNeedClassifyGroup(need.getNeedClassifyGroup().substring(1, need.getNeedClassifyGroup().length() - 1).split(","));
+        needListVo.setNeedContent(need.getNeedContent());
+        needListVo.setAnswerNum(need.getAnswerNum());
+        needListVo.setReadNum(need.getReadNum());
+        return needListVo;
     }
 
 }

@@ -1,5 +1,7 @@
 package com.appogg.website.vo.article;
 
+import java.util.Date;
+
 public class ArticleVo {
     private int id;
     private int createUserId;
@@ -12,6 +14,34 @@ public class ArticleVo {
     private String articleContent;
 
     private int commentNum;
+    private Date createDateTime;
+    private int readNum;
+
+    private Byte isFine;
+
+    public int getReadNum() {
+        return readNum;
+    }
+
+    public void setReadNum(int readNum) {
+        this.readNum = readNum;
+    }
+
+    public Date getCreateDateTime() {
+        return createDateTime;
+    }
+
+    public void setCreateDateTime(Date createDateTime) {
+        this.createDateTime = createDateTime;
+    }
+
+    public Byte getIsFine() {
+        return isFine;
+    }
+
+    public void setIsFine(Byte isFine) {
+        this.isFine = isFine;
+    }
 
     public int getId() {
         return id;
