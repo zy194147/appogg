@@ -12,5 +12,13 @@
     <result column="follow_to_user_name" property="followToUserName" jdbcType="VARCHAR" />
     <result column="create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
     <result column="modify_date_time" property="modifyDateTime" jdbcType="TIMESTAMP" />
+    <result column="is_enable" property="isEnable" jdbcType="TINYINT" />
   </resultMap>
+  
+  <update id="unfollowUser" parameterType="int">
+    update ogg_follow set is_enable=0
+    where
+    follow_user_id = #{followUserId,jdbcType=INTEGER} and
+    follow_to_user_id = #{followToUserId,jdbcType=INTEGER}
+  </update>
 </mapper>

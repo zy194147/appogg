@@ -55,6 +55,12 @@ public class UserFollowController extends BaseController<UserFollowBiz, OggFollo
         Query query = new Query(params);
         return this.baseBiz.followUser(query,request);
     }
+    @GetMapping("unfollowUser")
+    public ObjectRestResponse unfollowUser(@RequestParam Map<String,Object> params, HttpServletRequest request){
+
+        Query query = new Query(params);
+        return this.baseBiz.unfollowUser(query,request);
+    }
 
 
 }

@@ -51,6 +51,7 @@ public class UserFollowBiz extends BaseBiz<OggFollowMapper,OggFollow> {
                     if ("userId".equals(entry.getKey())) {
                         // 查出关注我的 ( followToUserId 为我的 id )
                         criteria.andEqualTo("followToUserId",entry.getValue());
+                        criteria.andEqualTo("isEnable",1);
                     }
                 }
             }
@@ -58,7 +59,7 @@ public class UserFollowBiz extends BaseBiz<OggFollowMapper,OggFollow> {
             followList = this.mapper.selectByExample(example);
         }
         for(OggFollow follow:followList){
-            OggUser user = userMapper.selectByPrimaryKey(follow.getFollowToUserId());
+            OggUser user = userMapper.selectByPrimaryKey(follow.getFollowUserId());
             userList.add(user);
         }
 
@@ -86,6 +87,8 @@ public class UserFollowBiz extends BaseBiz<OggFollowMapper,OggFollow> {
                     if ("userId".equals(entry.getKey())) {
                         // 查出关注我的 ( followUserId 为我的 id )
                         criteria.andEqualTo("followUserId",entry.getValue());
+                        criteria.andEqualTo("isEnable",1);
+
                     }
                 }
             }
@@ -123,6 +126,7 @@ public class UserFollowBiz extends BaseBiz<OggFollowMapper,OggFollow> {
                     if ("userId".equals(entry.getKey())) {
                         criteria.andEqualTo("followToUserId",entry.getValue());
                         criteria.andEqualTo("followUserId",loginUser.getId());
+                        criteria.andEqualTo("isEnable",1);
                     }
                 }
             }
@@ -145,33 +149,74 @@ public class UserFollowBiz extends BaseBiz<OggFollowMapper,OggFollow> {
 
         OggUser loginUser = userCheck.getLoginUser(request);
         int followToUserId = 0;
+        Example example = new Example(OggFollow.class);
         if (query.entrySet().size() > 0) {
+            Example.Criteria criteria = example.createCriteria();
             for (Map.Entry<String, Object> entry : query.entrySet()) {
                 if (StringUtils.isNotBlank(entry.getValue().toString())) {
                     if ("userId".equals(entry.getKey())) {
-                        System.out.println("lsdakjfslkdaj");
+                        followToUserId = Integer.parseInt(entry.getValue().toString());
+
+                        criteria.andEqualTo("followToUserId",entry.getValue());
+                        criteria.andEqualTo("followUserId",loginUser.getId());
+                    }
+                }
+            }
+        }
+        List<OggFollow> followList = this.mapper.selectByExample(example);
+        if(followList.size() > 0){
+            OggFollow follow = followList.get(0);
+            follow.setIsEnable(new Byte((byte)1));
+            this.mapper.updateByExampleSelective(follow,example);
+            // 关注成功返回 1
+            return new ObjectRestResponse().data("1");
+        } else {
+
+            OggUser user = userMapper.selectByPrimaryKey(followToUserId);
+            if(user != null){
+                OggFollow follow = new OggFollow();
+                follow.setCreateDateTime(new Date());
+                follow.setModifyDateTime(new Date());
+                follow.setFollowUserId(loginUser.getId());
+                follow.setFollowUserName(loginUser.getUserName());
+                follow.setFollowToUserId(user.getId());
+                follow.setFollowToUserName(user.getUserName());
+                follow.setIsEnable(new Byte((byte)1));
+                this.mapper.insert(follow);
+                // 关注成功返回 1
+                return new ObjectRestResponse().data("1");
+
+            }
+        }
+
+        // 关注失败返回 0
+        return new ObjectRestResponse().data("0");
+
+    }
+
+
+    public ObjectRestResponse unfollowUser(Query query, HttpServletRequest request){
+
+        OggUser loginUser = userCheck.getLoginUser(request);
+        int followToUserId = 0;
+        Example example = new Example(OggFollow.class);
+        if (query.entrySet().size() > 0) {
+            Example.Criteria criteria = example.createCriteria();
+            for (Map.Entry<String, Object> entry : query.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getValue().toString())) {
+                    if ("userId".equals(entry.getKey())) {
                         followToUserId = Integer.parseInt(entry.getValue().toString());
                     }
                 }
             }
         }
-        System.out.println("关注： " + followToUserId);
-        OggUser user = userMapper.selectByPrimaryKey(followToUserId);
-        if(user != null){
-            OggFollow follow = new OggFollow();
-            follow.setCreateDateTime(new Date());
-            follow.setModifyDateTime(new Date());
-            follow.setFollowUserId(loginUser.getId());
-            follow.setFollowUserName(loginUser.getUserName());
-            follow.setFollowToUserId(user.getId());
-            follow.setFollowToUserName(user.getUserName());
-            this.mapper.insert(follow);
-            // 关注成功返回 1
-            return new ObjectRestResponse().data("1");
-
+        if(followToUserId != 0){
+            this.mapper.unfollowUser(loginUser.getId(),followToUserId);
+            // 取消关注成功返回 0
+            return new ObjectRestResponse().data("0");
         }
-        // 关注失败返回 0
-        return new ObjectRestResponse().data("0");
+        // 取消关注成功‘返回 1
+        return new ObjectRestResponse().data("1");
 
     }
 

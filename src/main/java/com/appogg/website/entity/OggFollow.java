@@ -32,6 +32,9 @@ public class OggFollow {
     @Column(name = "modify_date_time")
     private Date modifyDateTime;
 
+    @Column(name = "is_enable")
+    private Byte isEnable;
+
     /**
      * @return id
      */
@@ -136,5 +139,19 @@ public class OggFollow {
      */
     public void setModifyDateTime(Date modifyDateTime) {
         this.modifyDateTime = modifyDateTime;
+    }
+
+    /**
+     * @return is_enable
+     */
+    public Byte getIsEnable() {
+        return isEnable;
+    }
+
+    /**
+     * @param isEnable
+     */
+    public void setIsEnable(Byte isEnable) {
+        this.isEnable = isEnable;
     }
 }
