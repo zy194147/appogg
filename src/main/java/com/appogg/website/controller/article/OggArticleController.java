@@ -27,8 +27,8 @@ public class OggArticleController extends BaseController<OggArticleBiz,OggArticl
      */
     @UserLoginToken
     @PostMapping("add")
-    public ObjectRestResponse insertArticle(@RequestBody ArticleVo articleVo){
-        return this.baseBiz.insertArticleMsg(articleVo);
+    public ObjectRestResponse insertArticle(@RequestBody ArticleVo articleVo,HttpServletRequest request){
+        return this.baseBiz.insertArticleMsg(articleVo,request);
     }
 
     @GetMapping("list")

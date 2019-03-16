@@ -10,6 +10,7 @@ import com.appogg.website.util.Query;
 import com.appogg.website.vo.soft.SoftVO;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -18,8 +19,8 @@ public class OggSoftController extends BaseController<OggSoftBiz,OggSoft> {
 
     @UserLoginToken
     @PostMapping("add")
-    public ObjectRestResponse insertSoft(@RequestBody SoftVO softVO){
-        return this.baseBiz.insertSoftMsg(softVO);
+    public ObjectRestResponse insertSoft(@RequestBody SoftVO softVO, HttpServletRequest request){
+        return this.baseBiz.insertSoftMsg(softVO,request);
     }
 
     @GetMapping("list")

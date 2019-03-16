@@ -10,6 +10,7 @@ import com.appogg.website.util.Query;
 import com.appogg.website.vo.need.NeedVo;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -18,8 +19,8 @@ public class OggNeedController extends BaseController<OggNeedBiz,OggNeed> {
 
     @UserLoginToken
     @PostMapping("add")
-    public ObjectRestResponse insertNeed(@RequestBody NeedVo needVo){
-        return this.baseBiz.insertNeedMsg(needVo);
+    public ObjectRestResponse insertNeed(@RequestBody NeedVo needVo, HttpServletRequest request){
+        return this.baseBiz.insertNeedMsg(needVo,request);
     }
 
     @GetMapping("list")
@@ -39,4 +40,9 @@ public class OggNeedController extends BaseController<OggNeedBiz,OggNeed> {
         return  this.baseBiz.selectNeedDetail(query);
     }
 
+    @GetMapping("updateReadNum")
+    public ObjectRestResponse uploadArticleReadNum(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return  this.baseBiz.updateNeedReadNum(query);
+    }
 }

@@ -1,22 +1,29 @@
 package com.appogg.website.biz.article;
 
+import com.appogg.website.auth.UserCheck;
 import com.appogg.website.biz.BaseBiz;
 import com.appogg.website.entity.OggArticle;
+import com.appogg.website.entity.OggUser;
 import com.appogg.website.mapper.OggArticleMapper;
+import com.appogg.website.mapper.OggUserMapper;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.util.EntityUtils;
 import com.appogg.website.util.Query;
+import com.appogg.website.util.RedisUtils;
+import com.appogg.website.util.SerializeUtils;
 import com.appogg.website.vo.article.ArticleListVo;
 import com.appogg.website.vo.article.ArticleVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,11 +33,27 @@ import java.util.*;
 @Service
 public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
 
-    public ObjectRestResponse insertArticleMsg(ArticleVo articleVo) {
+    @Autowired
+    private OggUserMapper userMapper;
+
+    @Autowired
+    private UserCheck userCheck;
+
+    public ObjectRestResponse insertArticleMsg(ArticleVo articleVo,HttpServletRequest request) {
+
+        OggUser loginUser = userCheck.getLoginUser(request);
+        System.out.println("asdkfasdk:" + loginUser);
+
+        if(loginUser == null){
+            return new ObjectRestResponse().rel(true).data("添加失败，未登录");
+        }
+
         OggArticle article = new OggArticle();
         article.setCreateDateTime(new Date());
         article.setModifyDateTime(new Date());
-        article.setCreateUserId(1);
+
+        article.setCreateUserId(loginUser.getId());
+        article.setCreateUserName(loginUser.getUserName());
         article.setIsDelete(new Byte((byte) 0));
         article.setReadNum(0);
         article.setCommentNum(0);
@@ -42,6 +65,10 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
         article.setArticleClassifyGroup(Arrays.toString(articleVo.getArticleClassifyGroup()));
         article.setArticleSummary(articleVo.getArticleSummary());
         article.setArticleContent(articleVo.getArticleContent());
+
+        OggUser user = userMapper.selectByPrimaryKey(loginUser.getId());
+        user.setArticleNum(user.getArticleNum()+1);
+        userMapper.updateByPrimaryKeySelective(user);
         this.mapper.insertSelective(article);
         return new ObjectRestResponse().rel(true).data("添加文章成功");
     }
@@ -52,6 +79,7 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
         Page result = PageHelper.startPage(query.getPage(), query.getLimit());
 
         Example example = new Example(OggArticle.class);
+        example.setOrderByClause("create_date_time desc");
         if (query.entrySet().size() > 0) {
             Example.Criteria criteria = example.createCriteria();
             for (Map.Entry<String, Object> entry : query.entrySet()) {
@@ -65,6 +93,7 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
         } else {
             articleList = this.mapper.selectAll();
         }
+
 
         List<ArticleListVo> articleListVoList = new ArrayList<>();
         articleListVoList = getArticleListVo(articleList);
@@ -88,6 +117,9 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
             articleListVo.setArticleClassifyGroup(article.getArticleClassifyGroup().substring(1, article.getArticleClassifyGroup().length() - 1).split(","));
             articleListVo.setIsFine(article.getIsFine());
             articleListVo.setIsSticky(article.getIsSticky());
+
+            OggUser user = userMapper.selectByPrimaryKey(article.getCreateUserId());
+            articleListVo.setUserHeadIcon(user.getUserHeadIcon());
             articleListVoList.add(articleListVo);
         }
         return articleListVoList;
@@ -201,6 +233,12 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
             if (articleId != 0) {
                 article = this.mapper.selectByPrimaryKey(articleId);
                 article.setReadNum(article.getReadNum() + 1);
+
+                // 更新总阅读量
+                OggUser user = userMapper.selectByPrimaryKey(article.getCreateUserId());
+                user.setArticleReadNum(user.getArticleReadNum()+1);
+                userMapper.updateByPrimaryKeySelective(user);
+
                 this.mapper.updateByPrimaryKey(article);
             }
         }

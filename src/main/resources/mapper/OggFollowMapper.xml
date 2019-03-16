@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.appogg.website.mapper.OggFollowMapper" >
+  <resultMap id="BaseResultMap" type="com.appogg.website.entity.OggFollow" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="follow_user_id" property="followUserId" jdbcType="INTEGER" />
+    <result column="follow_user_name" property="followUserName" jdbcType="VARCHAR" />
+    <result column="follow_to_user_id" property="followToUserId" jdbcType="INTEGER" />
+    <result column="follow_to_user_name" property="followToUserName" jdbcType="VARCHAR" />
+    <result column="create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
+    <result column="modify_date_time" property="modifyDateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

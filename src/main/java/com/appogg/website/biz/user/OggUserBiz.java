@@ -4,13 +4,24 @@ import com.alibaba.fastjson.JSONObject;
 import com.appogg.website.biz.BaseBiz;
 import com.appogg.website.biz.token.TokenBiz;
 import com.appogg.website.entity.OggArticle;
+import com.appogg.website.entity.OggNeed;
+import com.appogg.website.entity.OggSoft;
 import com.appogg.website.entity.OggUser;
+import com.appogg.website.mapper.OggArticleMapper;
+import com.appogg.website.mapper.OggNeedMapper;
+import com.appogg.website.mapper.OggSoftMapper;
 import com.appogg.website.mapper.OggUserMapper;
 import com.appogg.website.msg.ObjectRestResponse;
+import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.util.Query;
 import com.appogg.website.util.RedisUtils;
 import com.appogg.website.util.SerializeUtils;
+import com.appogg.website.vo.article.ArticleListVo;
+import com.appogg.website.vo.need.NeedListVo;
+import com.appogg.website.vo.soft.SoftListVO;
 import com.appogg.website.vo.user.UserVO;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
@@ -21,7 +32,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -29,6 +42,15 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
 
     @Resource
     private RedisUtils redisUtils;
+
+    @Autowired
+    private OggArticleMapper articleMapper;
+
+    @Autowired
+    private OggSoftMapper softMapper;
+
+    @Autowired
+    private OggNeedMapper needMapper;
 
     @Autowired
     TokenBiz tokenBiz;
@@ -139,6 +161,75 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
             }
         }
         return new ObjectRestResponse().rel(true).data(userVO);
+    }
+
+
+
+    public TableResultResponse listArticles(Query query) {
+
+        List<OggArticle> articleList = new ArrayList<>();
+        Page result = PageHelper.startPage(query.getPage(), query.getLimit());
+
+        Example example = new Example(OggArticle.class);
+        example.setOrderByClause("create_date_time desc");
+        if (query.entrySet().size() > 0) {
+            Example.Criteria criteria = example.createCriteria();
+            for (Map.Entry<String, Object> entry : query.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
+                    if ("userId".equals(entry.getKey())) {
+                        criteria.andEqualTo("createUserId", entry.getValue());
+                    }
+                }
+            }
+            articleList = articleMapper.selectByExample(example);
+        }
+        return new TableResultResponse<>(result.getTotal(), articleList);
+    }
+
+
+    public TableResultResponse listSofts(Query query) {
+
+        List<OggSoft> softList = new ArrayList<>();
+        List<SoftListVO> softListVOList = new ArrayList<>();
+        Page result = PageHelper.startPage(query.getPage(), query.getLimit());
+
+        Example example = new Example(OggSoft.class);
+        if (query.entrySet().size() > 0) {
+            Example.Criteria criteria = example.createCriteria();
+            for (Map.Entry<String, Object> entry : query.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
+                    if ("userId".equals(entry.getKey())) {
+                        criteria.andLike("createUserId", entry.getValue().toString());
+                    }
+                }
+            }
+            example.setOrderByClause("create_date_time desc");
+            softList = softMapper.selectByExample(example);
+        }
+        return new TableResultResponse<>(result.getTotal(), softList);
+    }
+
+    public TableResultResponse listNeeds(Query query){
+
+        List<OggNeed> needList = new ArrayList<>();
+        List<NeedListVo> needListVoList = new ArrayList<>();
+        Page result = PageHelper.startPage(query.getPage(),query.getLimit());
+
+        Example example = new Example(OggNeed.class);
+        if (query.entrySet().size() > 0) {
+            Example.Criteria criteria = example.createCriteria();
+            for (Map.Entry<String, Object> entry : query.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getValue().toString())) {
+                    if ("userId".equals(entry.getKey())) {
+                        criteria.andEqualTo("createUserId",entry.getValue());
+                    }
+                }
+            }
+            example.setOrderByClause("is_solved desc");
+            needList = needMapper.selectByExample(example);
+        }
+
+        return new TableResultResponse<>(result.getTotal(),needList);
     }
 
 }

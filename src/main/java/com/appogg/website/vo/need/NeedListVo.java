@@ -10,6 +10,16 @@ public class NeedListVo extends NeedVo {
     private Byte isSolved;
     private int readNum;
 
+    private String userHeadIcon;
+
+    public String getUserHeadIcon() {
+        return userHeadIcon;
+    }
+
+    public void setUserHeadIcon(String userHeadIcon) {
+        this.userHeadIcon = userHeadIcon;
+    }
+
     public int getReadNum() {
         return readNum;
     }

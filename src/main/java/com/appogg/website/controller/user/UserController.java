@@ -6,6 +6,7 @@ import com.appogg.website.biz.token.TokenBiz;
 import com.appogg.website.biz.user.OggUserBiz;
 import com.appogg.website.entity.OggUser;
 import com.appogg.website.msg.ObjectRestResponse;
+import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.rest.BaseController;
 import com.appogg.website.util.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,27 @@ public class UserController extends BaseController<OggUserBiz,OggUser> {
         System.out.println("userddddddddddddddddddd");
         Query query = new Query(params);
         return this.baseBiz.selectUserDetail(query);
+    }
 
+
+    @GetMapping("listArticle")
+    public TableResultResponse listArticles(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return this.baseBiz.listArticles(query);
+    }
+
+
+    @GetMapping("listSoft")
+    public TableResultResponse listSofts(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return this.baseBiz.listSofts(query);
+    }
+
+
+    @GetMapping("listNeed")
+    public TableResultResponse listNeeds(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return this.baseBiz.listNeeds(query);
     }
 
 

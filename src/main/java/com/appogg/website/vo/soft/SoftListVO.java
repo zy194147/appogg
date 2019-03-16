@@ -18,6 +18,16 @@ public class SoftListVO {
     private int readNum;
     private String[] softDownloadAddr;
 
+    private String userHeadIcon;
+
+    public String getUserHeadIcon() {
+        return userHeadIcon;
+    }
+
+    public void setUserHeadIcon(String userHeadIcon) {
+        this.userHeadIcon = userHeadIcon;
+    }
+
     public String[] getSoftDownloadAddr() {
         return softDownloadAddr;
     }

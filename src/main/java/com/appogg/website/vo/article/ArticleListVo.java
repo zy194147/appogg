@@ -10,6 +10,16 @@ public class ArticleListVo extends ArticleVo {
     private Byte isFine;
     private Byte isSticky;
 
+    private String userHeadIcon;
+
+    public String getUserHeadIcon() {
+        return userHeadIcon;
+    }
+
+    public void setUserHeadIcon(String userHeadIcon) {
+        this.userHeadIcon = userHeadIcon;
+    }
+
     public Byte getIsSticky() {
         return isSticky;
     }

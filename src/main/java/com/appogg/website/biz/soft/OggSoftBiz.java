@@ -1,5 +1,6 @@
 package com.appogg.website.biz.soft;
 
+import com.appogg.website.auth.UserCheck;
 import com.appogg.website.biz.BaseBiz;
 import com.appogg.website.entity.OggArticle;
 import com.appogg.website.entity.OggSoft;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -26,16 +28,23 @@ public class OggSoftBiz extends BaseBiz<OggSoftMapper, OggSoft> {
 
     @Autowired
     private OggUserMapper oggUserMapper;
+    @Autowired
+    private UserCheck userCheck;
 
-    public ObjectRestResponse insertSoftMsg(SoftVO softVO) {
 
+    public ObjectRestResponse insertSoftMsg(SoftVO softVO, HttpServletRequest request) {
+        OggUser loginUser = userCheck.getLoginUser(request);
+
+        if(loginUser == null){
+            return new ObjectRestResponse().rel(true).data("添加失败，未登录");
+        }
         OggSoft soft = new OggSoft();
         soft.setSoftTitleName(softVO.getSoftTitleName());
         soft.setSoftTitleIcon(softVO.getSoftTitleIcon());
         soft.setCreateDateTime(new Date());
         soft.setModifyDateTime(new Date());
-        soft.setCreateUserId(1);
-        soft.setCreateUserName("zhangyj");
+        soft.setCreateUserId(loginUser.getId());
+        soft.setCreateUserName(loginUser.getUserName());
         soft.setIsDelete(new Byte((byte) 0));
         soft.setSoftAuthId(0);
         soft.setSoftClassifyGroup(Arrays.toString(softVO.getSoftClassifyGroup()));
@@ -48,6 +57,10 @@ public class OggSoftBiz extends BaseBiz<OggSoftMapper, OggSoft> {
         soft.setUnhelpfulNum(0);
         soft.setSoftSystemPlatform(softVO.getSoftSystemPlatform());
         soft.setSoftDownloadAddr(softVO.getSoftDownloadAddr());
+
+        OggUser user = oggUserMapper.selectByPrimaryKey(loginUser.getId());
+        user.setArticleNum(user.getArticleNum()+1);
+        oggUserMapper.updateByPrimaryKeySelective(user);
 
         this.mapper.insertSelective(soft);
         return new ObjectRestResponse().rel(true).data("添加软件成功");
@@ -132,6 +145,11 @@ public class OggSoftBiz extends BaseBiz<OggSoftMapper, OggSoft> {
             if (softId != 0) {
                 soft = this.mapper.selectByPrimaryKey(softId);
                 soft.setReadNum(soft.getReadNum() + 1);
+
+                // 更新总阅读量
+                OggUser user = oggUserMapper.selectByPrimaryKey(soft.getCreateUserId());
+                user.setArticleReadNum(user.getArticleReadNum()+1);
+                oggUserMapper.updateByPrimaryKeySelective(user);
                 this.mapper.updateByPrimaryKey(soft);
             }
         }
@@ -164,6 +182,7 @@ public class OggSoftBiz extends BaseBiz<OggSoftMapper, OggSoft> {
         softListVO.setReadNum(soft.getReadNum());
         softListVO.setSoftTitleIcon(soft.getSoftTitleIcon());
         softListVO.setSoftDownloadAddr(soft.getSoftDownloadAddr().split(";"));
+        softListVO.setUserHeadIcon(user.getUserHeadIcon());
         return softListVO;
     }
 
