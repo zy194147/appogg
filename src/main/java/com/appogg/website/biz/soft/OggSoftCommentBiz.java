@@ -2,8 +2,10 @@ package com.appogg.website.biz.soft;
 
 import com.appogg.website.biz.BaseBiz;
 import com.appogg.website.entity.OggArticleComment;
+import com.appogg.website.entity.OggSoft;
 import com.appogg.website.entity.OggSoftComment;
 import com.appogg.website.mapper.OggSoftCommentMapper;
+import com.appogg.website.mapper.OggSoftMapper;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.util.Query;
@@ -11,6 +13,7 @@ import com.appogg.website.vo.article.ArticleCommentVO;
 import com.appogg.website.vo.soft.SoftCommentVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -22,6 +25,8 @@ import java.util.Map;
 @Service
 public class OggSoftCommentBiz extends BaseBiz<OggSoftCommentMapper, OggSoftComment> {
 
+    @Autowired
+    private OggSoftMapper softMapper;
 
     public TableResultResponse selectCommentByQuery(Query query) {
         Class<OggSoftComment> clazz = (Class<OggSoftComment>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
@@ -60,7 +65,14 @@ public class OggSoftCommentBiz extends BaseBiz<OggSoftCommentMapper, OggSoftComm
         softComment.setBackToUserId(0);
         softComment.setBackToUserName(null);
 
+
+
         this.mapper.insertSelective(softComment);
+        // 更新软件的评论数
+        OggSoft soft = softMapper.selectByPrimaryKey(softComment.getCommentSoftId());
+        soft.setCommentNum(soft.getCommentNum()+1);
+        softMapper.updateByPrimaryKeySelective(soft);
+
         return new ObjectRestResponse().data("ok");
 
 

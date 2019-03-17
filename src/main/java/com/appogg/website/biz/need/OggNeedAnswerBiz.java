@@ -1,14 +1,18 @@
 package com.appogg.website.biz.need;
 
 import com.appogg.website.biz.BaseBiz;
+import com.appogg.website.entity.OggNeed;
 import com.appogg.website.entity.OggNeedAnswer;
 import com.appogg.website.mapper.OggNeedAnswerMapper;
+import com.appogg.website.mapper.OggNeedMapper;
+import com.appogg.website.mapper.OggSoftMapper;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.util.Query;
 import com.appogg.website.vo.need.NeedAnswerVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -19,6 +23,9 @@ import java.util.Map;
 
 @Service
 public class OggNeedAnswerBiz extends BaseBiz<OggNeedAnswerMapper,OggNeedAnswer> {
+
+    @Autowired
+    private OggNeedMapper needMapper;
 
 
     public TableResultResponse selectAnswerByQuery(Query query) {
@@ -59,6 +66,12 @@ public class OggNeedAnswerBiz extends BaseBiz<OggNeedAnswerMapper,OggNeedAnswer>
         needAnswer.setIsEnable(new Byte((byte)0));
 
         this.mapper.insertSelective(needAnswer);
+
+        // 更新问题评论数
+        OggNeed need = needMapper.selectByPrimaryKey(needAnswer.getAnswerNeedId());
+        need.setAnswerNum(need.getAnswerNum() + 1);
+        needMapper.updateByPrimaryKeySelective(need);
+
         return new ObjectRestResponse().data("ok");
 
 

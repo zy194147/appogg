@@ -1,8 +1,10 @@
 package com.appogg.website.biz.article;
 
 import com.appogg.website.biz.BaseBiz;
+import com.appogg.website.entity.OggArticle;
 import com.appogg.website.entity.OggArticleComment;
 import com.appogg.website.mapper.OggArticleCommentMapper;
+import com.appogg.website.mapper.OggArticleMapper;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.util.Query;
@@ -10,6 +12,7 @@ import com.appogg.website.vo.article.ArticleCommentVO;
 import com.appogg.website.vo.comment.CommentTree;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -22,6 +25,9 @@ import java.util.Map;
 
 @Service
 public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper,OggArticleComment> {
+
+    @Autowired
+    private OggArticleMapper articleMapper;
 
     public TableResultResponse selectCommentByQuery(Query query){
         Class<OggArticleComment> clazz = (Class<OggArticleComment>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
@@ -70,6 +76,10 @@ public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper,OggArt
         articleComment.setBackToUserName(null);
 
         this.mapper.insertSelective(articleComment);
+        // 更新文章评论数
+        OggArticle article = articleMapper.selectByPrimaryKey(articleComment.getCommentArticleId());
+        article.setCommentNum(article.getCommentNum()+1);
+        articleMapper.updateByPrimaryKey(article);
         return new ObjectRestResponse().data("ok");
 
 
