@@ -133,6 +133,8 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
         List<ArticleVo> articleListVOList = new ArrayList<>();
         Page result = PageHelper.startPage(query.getPage(), query.getLimit());
         Example example = new Example(OggArticle.class);
+        example.setOrderByClause("comment_num desc");
+
         if (query.entrySet().size() > 0) {
             Example.Criteria criteria = example.createCriteria();
             for (Map.Entry<String, Object> entry : query.entrySet()) {
@@ -146,7 +148,6 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
         } else {
             articleList = this.mapper.selectAll();
         }
-        example.setOrderByClause("comment_num desc");
         for (OggArticle article : articleList) {
             ArticleVo articleVo = new ArticleVo();
             articleVo.setId(article.getId());
@@ -161,12 +162,25 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
 
     public TableResultResponse listAuthorTrendingArticle(Query query) {
 
-        List<OggArticle> articleList;
+        List<OggArticle> articleList = new ArrayList<>();
         List<ArticleVo> articleListVOList = new ArrayList<>();
         Page result = PageHelper.startPage(query.getPage(), query.getLimit());
         Example example = new Example(OggArticle.class);
         example.setOrderByClause("comment_num desc");
-        articleList = this.mapper.selectByExample(example);
+
+        if (query.entrySet().size() > 0) {
+            Example.Criteria criteria = example.createCriteria();
+            for (Map.Entry<String, Object> entry : query.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
+                    if ("createUserId".equals(entry.getKey())) {
+                        criteria.andEqualTo("createUserId", Integer.parseInt(entry.getValue().toString()));
+                    }
+                }
+            }
+            articleList = this.mapper.selectByExample(example);
+        }
+
+//        articleList = this.mapper.selectByExample(example);
         for (OggArticle article : articleList) {
             ArticleVo articleVo = new ArticleVo();
             articleVo.setId(article.getId());

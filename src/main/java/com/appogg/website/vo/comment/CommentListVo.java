@@ -12,9 +12,18 @@ public class CommentListVo  {
     private String commentUserIcon;
     private String commentContent;
 
+    private Byte isAdopt;
+
     private Integer backToUserId;
     private String backToUserName;
 
+    public Byte getIsAdopt() {
+        return isAdopt;
+    }
+
+    public void setIsAdopt(Byte isAdopt) {
+        this.isAdopt = isAdopt;
+    }
 
     public String getBackToUserName() {
         return backToUserName;

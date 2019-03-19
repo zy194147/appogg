@@ -1,10 +1,7 @@
 package com.appogg.website.biz.need;
 
 import com.appogg.website.biz.BaseBiz;
-import com.appogg.website.entity.OggArticleComment;
-import com.appogg.website.entity.OggNeed;
-import com.appogg.website.entity.OggNeedAnswer;
-import com.appogg.website.entity.OggUser;
+import com.appogg.website.entity.*;
 import com.appogg.website.mapper.OggNeedAnswerMapper;
 import com.appogg.website.mapper.OggNeedMapper;
 import com.appogg.website.mapper.OggSoftMapper;
@@ -16,6 +13,7 @@ import com.appogg.website.vo.comment.CommentListVo;
 import com.appogg.website.vo.need.NeedAnswerVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -46,6 +44,7 @@ public class OggNeedAnswerBiz extends BaseBiz<OggNeedAnswerMapper,OggNeedAnswer>
             }
         }
         Page<Object> result = PageHelper.startPage(query.getPage(), query.getLimit());
+        example.setOrderByClause("is_adopt desc");
         List<OggNeedAnswer> list = mapper.selectByExample(example);
 
         List<CommentListVo> commentListVoList = getCommentList(list);
@@ -70,6 +69,7 @@ public class OggNeedAnswerBiz extends BaseBiz<OggNeedAnswerMapper,OggNeedAnswer>
             commentListVo.setCreateDateTime(needAnswer.getCreateDateTime());
             commentListVo.setBackToUserId(needAnswer.getBackToUserId());
             commentListVo.setBackToUserName(needAnswer.getBackToUserName());
+            commentListVo.setIsAdopt(needAnswer.getIsAdopt());
             commentListVoList.add(commentListVo);
         }
         return commentListVoList;
@@ -113,4 +113,76 @@ public class OggNeedAnswerBiz extends BaseBiz<OggNeedAnswerMapper,OggNeedAnswer>
 
 
     }
+
+
+
+
+
+    public ObjectRestResponse needAdoptAnswer(Query query) {
+
+        int answerId = 0;
+        OggNeedAnswer needAnswer = null;
+        OggNeed need ;
+        Example example = new Example(OggArticle.class);
+        if (query.entrySet().size() > 0) {
+            Example.Criteria criteria = example.createCriteria();
+            for (Map.Entry<String, Object> entry : query.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
+                    if ("id".equals(entry.getKey())) {
+                        answerId = Integer.parseInt(entry.getValue().toString());
+                    }
+                }
+            }
+            if (answerId != 0) {
+                needAnswer = this.mapper.selectByPrimaryKey(answerId);
+                needAnswer.setIsAdopt(new Byte((byte)1));
+                // 更新打案为采纳
+                this.mapper.updateByPrimaryKeySelective(needAnswer);
+                need = needMapper.selectByPrimaryKey(needAnswer.getAnswerNeedId());
+                need.setIsSolved(new Byte((byte)1));
+                // 更新问题文章为已解决
+                needMapper.updateByPrimaryKeySelective(need);
+
+            }
+        }
+        return new ObjectRestResponse().rel(true).data("ok");
+    }
+
+
+
+
+    public ObjectRestResponse needUnadoptAnswer(Query query) {
+
+        int answerId = 0;
+        OggNeedAnswer needAnswer = null;
+        OggNeed need ;
+        Example example = new Example(OggArticle.class);
+        if (query.entrySet().size() > 0) {
+            Example.Criteria criteria = example.createCriteria();
+            for (Map.Entry<String, Object> entry : query.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
+                    if ("id".equals(entry.getKey())) {
+                        answerId = Integer.parseInt(entry.getValue().toString());
+                    }
+                }
+            }
+            if (answerId != 0) {
+                needAnswer = this.mapper.selectByPrimaryKey(answerId);
+                needAnswer.setIsAdopt(new Byte((byte)0));
+                // 更新打案为采纳
+                this.mapper.updateByPrimaryKeySelective(needAnswer);
+                need = needMapper.selectByPrimaryKey(needAnswer.getAnswerNeedId());
+                need.setIsSolved(new Byte((byte)0));
+                // 更新问题文章为已解决
+                needMapper.updateByPrimaryKeySelective(need);
+
+            }
+        }
+        return new ObjectRestResponse().rel(true).data("ok");
+    }
+
+
+
+
+
 }

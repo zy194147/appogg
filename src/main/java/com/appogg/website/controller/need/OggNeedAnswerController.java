@@ -26,4 +26,17 @@ public class OggNeedAnswerController extends BaseController<OggNeedAnswerBiz,Ogg
         return this.baseBiz.insertNeedAnswer(answerVO);
     }
 
+
+    @GetMapping("adoptAnswer")
+    public ObjectRestResponse needAdoptAnswer(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return  this.baseBiz.needAdoptAnswer(query);
+    }
+
+    @GetMapping("unAdoptAnswer")
+    public ObjectRestResponse needUnadoptAnswer(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return  this.baseBiz.needUnadoptAnswer(query);
+    }
+
 }

@@ -45,4 +45,5 @@ public class OggNeedController extends BaseController<OggNeedBiz,OggNeed> {
         Query query = new Query(params);
         return  this.baseBiz.updateNeedReadNum(query);
     }
+
 }
