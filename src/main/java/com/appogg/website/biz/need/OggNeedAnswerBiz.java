@@ -1,14 +1,18 @@
 package com.appogg.website.biz.need;
 
 import com.appogg.website.biz.BaseBiz;
+import com.appogg.website.entity.OggArticleComment;
 import com.appogg.website.entity.OggNeed;
 import com.appogg.website.entity.OggNeedAnswer;
+import com.appogg.website.entity.OggUser;
 import com.appogg.website.mapper.OggNeedAnswerMapper;
 import com.appogg.website.mapper.OggNeedMapper;
 import com.appogg.website.mapper.OggSoftMapper;
+import com.appogg.website.mapper.OggUserMapper;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.util.Query;
+import com.appogg.website.vo.comment.CommentListVo;
 import com.appogg.website.vo.need.NeedAnswerVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +31,9 @@ public class OggNeedAnswerBiz extends BaseBiz<OggNeedAnswerMapper,OggNeedAnswer>
 
     @Autowired
     private OggNeedMapper needMapper;
+
+    @Autowired
+    private OggUserMapper userMapper;
 
 
     public TableResultResponse selectAnswerByQuery(Query query) {
@@ -39,19 +47,48 @@ public class OggNeedAnswerBiz extends BaseBiz<OggNeedAnswerMapper,OggNeedAnswer>
         }
         Page<Object> result = PageHelper.startPage(query.getPage(), query.getLimit());
         List<OggNeedAnswer> list = mapper.selectByExample(example);
-        return new TableResultResponse<OggNeedAnswer>(result.getTotal(), list);
+
+        List<CommentListVo> commentListVoList = getCommentList(list);
+
+        return new TableResultResponse<CommentListVo>(result.getTotal(), commentListVoList);
+    }
+
+
+
+
+    private List<CommentListVo> getCommentList(List<OggNeedAnswer> needAnswerList){
+
+        List<CommentListVo> commentListVoList = new ArrayList<>();
+        for(OggNeedAnswer needAnswer:needAnswerList){
+            CommentListVo commentListVo = new CommentListVo();
+            OggUser user = userMapper.selectByPrimaryKey(needAnswer.getCreateUserId());
+            commentListVo.setId(needAnswer.getId());
+            commentListVo.setCommentContent(needAnswer.getAnswerContent());
+            commentListVo.setCommentUserIcon(user.getUserHeadIcon());
+            commentListVo.setCommentUserId(needAnswer.getCreateUserId());
+            commentListVo.setCommentUserName(needAnswer.getCreateUserName());
+            commentListVo.setCreateDateTime(needAnswer.getCreateDateTime());
+            commentListVo.setBackToUserId(needAnswer.getBackToUserId());
+            commentListVo.setBackToUserName(needAnswer.getBackToUserName());
+            commentListVoList.add(commentListVo);
+        }
+        return commentListVoList;
+
     }
 
 
     public ObjectRestResponse insertNeedAnswer(NeedAnswerVO answerVO) {
 
         OggNeedAnswer needAnswer = new OggNeedAnswer();
-        needAnswer.setCreateUserId(1);
-        needAnswer.setCreateUserName("zhangyj");
+
+        OggUser user = userMapper.selectByPrimaryKey(answerVO.getAnswerUserId());
+
+        needAnswer.setCreateUserId(user.getId());
+        needAnswer.setCreateUserName(user.getUserName());
         needAnswer.setCreateDateTime(new Date());
         needAnswer.setModifyDateTime(new Date());
-        needAnswer.setModifyUserId(1);
-        needAnswer.setModifyUserName("zhangyj");
+        needAnswer.setModifyUserId(user.getId());
+        needAnswer.setModifyUserName(user.getUserName());
         needAnswer.setAnswerContent(answerVO.getAnswerContent());
         needAnswer.setIsDelete(new Byte((byte) 0));
         needAnswer.setIsSticky(new Byte((byte) 0));

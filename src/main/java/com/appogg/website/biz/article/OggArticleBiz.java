@@ -117,6 +117,7 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
             articleListVo.setArticleClassifyGroup(article.getArticleClassifyGroup().substring(1, article.getArticleClassifyGroup().length() - 1).split(","));
             articleListVo.setIsFine(article.getIsFine());
             articleListVo.setIsSticky(article.getIsSticky());
+            articleListVo.setCommentNum(article.getCommentNum());
 
             OggUser user = userMapper.selectByPrimaryKey(article.getCreateUserId());
             articleListVo.setUserHeadIcon(user.getUserHeadIcon());

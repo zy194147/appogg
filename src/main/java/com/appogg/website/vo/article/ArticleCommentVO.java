@@ -6,6 +6,16 @@ public class ArticleCommentVO {
 
     private int commentArticleId;
 
+    private int commentUserId;
+
+    public int getCommentUserId() {
+        return commentUserId;
+    }
+
+    public void setCommentUserId(int commentUserId) {
+        this.commentUserId = commentUserId;
+    }
+
     public int getCommentArticleId() {
         return commentArticleId;
     }

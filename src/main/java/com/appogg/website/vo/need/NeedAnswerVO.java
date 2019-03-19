@@ -6,6 +6,16 @@ public class NeedAnswerVO {
 
     private int answerNeedId;
 
+    private int answerUserId;
+
+    public int getAnswerUserId() {
+        return answerUserId;
+    }
+
+    public void setAnswerUserId(int answerUserId) {
+        this.answerUserId = answerUserId;
+    }
+
     public String getAnswerContent() {
         return answerContent;
     }

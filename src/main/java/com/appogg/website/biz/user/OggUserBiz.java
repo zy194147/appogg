@@ -112,6 +112,8 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
             user.setUserIntroduce("暂无任何简介");
             user.setUserHeadIcon("http://149.28.144.141/image/39db2230-69b8-452a-b423-f36a8df20718.jpg");
             user.setUserPageIcon("http://149.28.144.141/image/77e8009f-eed3-4931-ab22-8b836d834d57.jpeg");
+            user.setArticleReadNum(0);
+            user.setArticleNum(0);
 
             this.mapper.insert(user);
             jsonObject.put("status",200);
