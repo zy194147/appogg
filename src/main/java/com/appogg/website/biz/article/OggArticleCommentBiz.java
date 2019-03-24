@@ -1,12 +1,10 @@
 package com.appogg.website.biz.article;
 
 import com.appogg.website.biz.BaseBiz;
-import com.appogg.website.entity.OggArticle;
-import com.appogg.website.entity.OggArticleComment;
-import com.appogg.website.entity.OggSoftComment;
-import com.appogg.website.entity.OggUser;
+import com.appogg.website.entity.*;
 import com.appogg.website.mapper.OggArticleCommentMapper;
 import com.appogg.website.mapper.OggArticleMapper;
+import com.appogg.website.mapper.OggNoticeMapper;
 import com.appogg.website.mapper.OggUserMapper;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
@@ -28,19 +26,22 @@ import java.util.Map;
 
 
 @Service
-public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper,OggArticleComment> {
+public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper, OggArticleComment> {
 
     @Autowired
     private OggArticleMapper articleMapper;
+
+    @Autowired
+    private OggNoticeMapper noticeMapper;
 
 
     @Autowired
     private OggUserMapper userMapper;
 
-    public TableResultResponse selectCommentByQuery(Query query){
+    public TableResultResponse selectCommentByQuery(Query query) {
         Class<OggArticleComment> clazz = (Class<OggArticleComment>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         Example example = new Example(clazz);
-        if(query.entrySet().size()>0) {
+        if (query.entrySet().size() > 0) {
             Example.Criteria criteria = example.createCriteria();
             for (Map.Entry<String, Object> entry : query.entrySet()) {
                 criteria.andEqualTo(entry.getKey(), entry.getValue());
@@ -66,10 +67,10 @@ public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper,OggArt
     }
 
 
-    private List<CommentListVo> getCommentList(List<OggArticleComment> articleComments){
+    private List<CommentListVo> getCommentList(List<OggArticleComment> articleComments) {
 
         List<CommentListVo> commentListVoList = new ArrayList<>();
-        for(OggArticleComment articleComment:articleComments){
+        for (OggArticleComment articleComment : articleComments) {
             CommentListVo commentListVo = new CommentListVo();
             OggUser user = userMapper.selectByPrimaryKey(articleComment.getCreateUserId());
             commentListVo.setId(articleComment.getId());
@@ -86,7 +87,7 @@ public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper,OggArt
 
     }
 
-    public ObjectRestResponse insertArticleComment(ArticleCommentVO commentVO){
+    public ObjectRestResponse insertArticleComment(ArticleCommentVO commentVO) {
 
         OggArticleComment articleComment = new OggArticleComment();
 
@@ -98,8 +99,8 @@ public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper,OggArt
         articleComment.setModifyUserId(user.getId());
         articleComment.setModifyUserName(user.getUserName());
         articleComment.setCommentContent(commentVO.getCommentContent());
-        articleComment.setIsDelete(new Byte((byte)0));
-        articleComment.setIsSticky(new Byte((byte)0));
+        articleComment.setIsDelete(new Byte((byte) 0));
+        articleComment.setIsSticky(new Byte((byte) 0));
         articleComment.setHelpfulNum(0);
         articleComment.setUnhelpfulNum(0);
         articleComment.setCommentArticleId(commentVO.getCommentArticleId());
@@ -111,16 +112,33 @@ public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper,OggArt
         this.mapper.insertSelective(articleComment);
         // 更新文章评论数
         OggArticle article = articleMapper.selectByPrimaryKey(articleComment.getCommentArticleId());
-        article.setCommentNum(article.getCommentNum()+1);
+        article.setCommentNum(article.getCommentNum() + 1);
         articleMapper.updateByPrimaryKey(article);
+
+        // 生成一条系统通知
+        OggNotice notice = new OggNotice();
+        notice.setCreateDateTime(new Date());
+        notice.setModifyDateTime(new Date());
+        notice.setNoticeType("article");
+        notice.setActionFromUserId(user.getId());
+        notice.setActionFromUserName(user.getUserName());
+        notice.setNoticeToUserId(article.getCreateUserId());
+        OggUser toUser = userMapper.selectByPrimaryKey(article.getCreateUserId());
+        notice.setNoticeToUserName(toUser.getUserName());
+        notice.setIsDelete(new Byte((byte) 0));
+        notice.setReadStatus(new Byte((byte) 0));
+        notice.setNoticeContent(notice.getActionFromUserName() + " 在" + notice.getCreateDateTime() + " 评论了你的文章");
+        notice.setActionAccepter(commentVO.getCommentArticleId());
+        noticeMapper.insert(notice);
+
+
         return new ObjectRestResponse().data("ok");
 
 
     }
 
 
-
-    private List<CommentTree> getCommentTreeList(List<OggArticleComment> commentList){
+    private List<CommentTree> getCommentTreeList(List<OggArticleComment> commentList) {
         List<CommentTree> treeNodeList = new ArrayList<>();
         // 遍历查询结果，将结果转化为树形list
         for (OggArticleComment articleComment : commentList) {
@@ -150,8 +168,6 @@ public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper,OggArt
         }
         return treeNodeList;
     }
-
-
 
 
 }
