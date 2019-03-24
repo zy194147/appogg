@@ -7,6 +7,7 @@ import javax.persistence.*;
 @Table(name = "ogg_user")
 public class OggUser implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "user_name")

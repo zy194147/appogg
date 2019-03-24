@@ -2,10 +2,7 @@ package com.appogg.website.biz.need;
 
 import com.appogg.website.biz.BaseBiz;
 import com.appogg.website.entity.*;
-import com.appogg.website.mapper.OggNeedAnswerMapper;
-import com.appogg.website.mapper.OggNeedMapper;
-import com.appogg.website.mapper.OggSoftMapper;
-import com.appogg.website.mapper.OggUserMapper;
+import com.appogg.website.mapper.*;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.util.Query;
@@ -29,6 +26,9 @@ public class OggNeedAnswerBiz extends BaseBiz<OggNeedAnswerMapper,OggNeedAnswer>
 
     @Autowired
     private OggNeedMapper needMapper;
+
+    @Autowired
+    private OggNoticeMapper noticeMapper;
 
     @Autowired
     private OggUserMapper userMapper;
@@ -108,6 +108,23 @@ public class OggNeedAnswerBiz extends BaseBiz<OggNeedAnswerMapper,OggNeedAnswer>
         OggNeed need = needMapper.selectByPrimaryKey(needAnswer.getAnswerNeedId());
         need.setAnswerNum(need.getAnswerNum() + 1);
         needMapper.updateByPrimaryKeySelective(need);
+
+
+        // 生成一条系统通知
+        OggNotice notice = new OggNotice();
+        notice.setCreateDateTime(new Date());
+        notice.setModifyDateTime(new Date());
+        notice.setNoticeType("article");
+        notice.setActionFromUserId(user.getId());
+        notice.setActionFromUserName(user.getUserName());
+        notice.setNoticeToUserId(need.getCreateUserId());
+        OggUser toUser = userMapper.selectByPrimaryKey(need.getCreateUserId());
+        notice.setNoticeToUserName(toUser.getUserName());
+        notice.setIsDelete(new Byte((byte) 0));
+        notice.setReadStatus(new Byte((byte) 0));
+        notice.setNoticeContent(notice.getActionFromUserName() + " 在" + notice.getCreateDateTime() + " 评论了你的软件");
+        notice.setActionAccepter(answerVO.getAnswerNeedId());
+        noticeMapper.insert(notice);
 
         return new ObjectRestResponse().data("ok");
 

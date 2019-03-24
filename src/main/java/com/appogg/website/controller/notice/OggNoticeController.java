@@ -3,7 +3,6 @@ package com.appogg.website.controller.notice;
 import com.appogg.website.biz.notice.OggNoticeBiz;
 import com.appogg.website.entity.OggNotice;
 import com.appogg.website.msg.ObjectRestResponse;
-import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.rest.BaseController;
 import com.appogg.website.util.Query;
 import org.springframework.web.bind.annotation.GetMapping;

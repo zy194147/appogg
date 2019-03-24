@@ -1,17 +1,14 @@
 package com.appogg.website.biz.soft;
 
 import com.appogg.website.biz.BaseBiz;
-import com.appogg.website.entity.OggArticleComment;
-import com.appogg.website.entity.OggSoft;
-import com.appogg.website.entity.OggSoftComment;
-import com.appogg.website.entity.OggUser;
+import com.appogg.website.entity.*;
+import com.appogg.website.mapper.OggNoticeMapper;
 import com.appogg.website.mapper.OggSoftCommentMapper;
 import com.appogg.website.mapper.OggSoftMapper;
 import com.appogg.website.mapper.OggUserMapper;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.util.Query;
-import com.appogg.website.vo.article.ArticleCommentVO;
 import com.appogg.website.vo.comment.CommentListVo;
 import com.appogg.website.vo.soft.SoftCommentVO;
 import com.github.pagehelper.Page;
@@ -31,6 +28,9 @@ public class OggSoftCommentBiz extends BaseBiz<OggSoftCommentMapper, OggSoftComm
 
     @Autowired
     private OggSoftMapper softMapper;
+
+    @Autowired
+    private OggNoticeMapper noticeMapper;
 
     @Autowired
     private OggUserMapper userMapper;
@@ -105,6 +105,23 @@ public class OggSoftCommentBiz extends BaseBiz<OggSoftCommentMapper, OggSoftComm
         OggSoft soft = softMapper.selectByPrimaryKey(softComment.getCommentSoftId());
         soft.setCommentNum(soft.getCommentNum()+1);
         softMapper.updateByPrimaryKeySelective(soft);
+
+        // 生成一条系统通知
+        OggNotice notice = new OggNotice();
+        notice.setCreateDateTime(new Date());
+        notice.setModifyDateTime(new Date());
+        notice.setNoticeType("article");
+        notice.setActionFromUserId(user.getId());
+        notice.setActionFromUserName(user.getUserName());
+        notice.setNoticeToUserId(soft.getCreateUserId());
+        OggUser toUser = userMapper.selectByPrimaryKey(soft.getCreateUserId());
+        notice.setNoticeToUserName(toUser.getUserName());
+        notice.setIsDelete(new Byte((byte) 0));
+        notice.setReadStatus(new Byte((byte) 0));
+        notice.setNoticeContent(notice.getActionFromUserName() + " 在" + notice.getCreateDateTime() + " 评论了你的软件");
+        notice.setActionAccepter(commentVO.getCommentSoftId());
+        noticeMapper.insert(notice);
+
 
         return new ObjectRestResponse().data("ok");
 

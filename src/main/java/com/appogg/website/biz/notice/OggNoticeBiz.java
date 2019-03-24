@@ -8,7 +8,6 @@ import com.appogg.website.mapper.OggUserMapper;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.util.Query;
-import com.appogg.website.vo.comment.CommentListVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,9 +60,10 @@ public class OggNoticeBiz extends BaseBiz<OggNoticeMapper,OggNotice> {
                 }
             }
         }
+        example.setOrderByClause("create_date_time desc");
         noticeList = this.mapper.selectByExample(example);
         for(OggNotice notice:noticeList){
-            if("article".equals(notice.getNoticeType())){
+            if("comment".equals(notice.getNoticeType())){
                 commentNoticeList.add(notice);
             } else if("leaveMsg".equals(notice.getNoticeType())){
                 leaveMsgNoticeList.add(notice);

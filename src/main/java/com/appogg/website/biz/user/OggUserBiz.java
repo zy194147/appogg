@@ -3,14 +3,8 @@ package com.appogg.website.biz.user;
 import com.alibaba.fastjson.JSONObject;
 import com.appogg.website.biz.BaseBiz;
 import com.appogg.website.biz.token.TokenBiz;
-import com.appogg.website.entity.OggArticle;
-import com.appogg.website.entity.OggNeed;
-import com.appogg.website.entity.OggSoft;
-import com.appogg.website.entity.OggUser;
-import com.appogg.website.mapper.OggArticleMapper;
-import com.appogg.website.mapper.OggNeedMapper;
-import com.appogg.website.mapper.OggSoftMapper;
-import com.appogg.website.mapper.OggUserMapper;
+import com.appogg.website.entity.*;
+import com.appogg.website.mapper.*;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.util.Query;
@@ -48,6 +42,9 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
 
     @Autowired
     private OggSoftMapper softMapper;
+
+    @Autowired
+    private OggNoticeMapper noticeMapper;
 
     @Autowired
     private OggNeedMapper needMapper;
@@ -118,6 +115,22 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
             this.mapper.insert(user);
             jsonObject.put("status",200);
             jsonObject.put("message", "注册成功");
+
+            // 生成一条系统通知
+            OggNotice notice = new OggNotice();
+            notice.setCreateDateTime(new Date());
+            notice.setModifyDateTime(new Date());
+            notice.setNoticeType("system");
+            notice.setActionFromUserId(0);
+            notice.setActionFromUserName("system");
+            notice.setNoticeToUserId(user.getId());
+            notice.setNoticeToUserName(user.getUserName());
+            notice.setIsDelete(new Byte((byte) 0));
+            notice.setReadStatus(new Byte((byte) 0));
+            notice.setNoticeContent("恭喜注册成功");
+            notice.setActionAccepter(0);
+            noticeMapper.insert(notice);
+
             return new ObjectRestResponse().data(jsonObject);
 
         }

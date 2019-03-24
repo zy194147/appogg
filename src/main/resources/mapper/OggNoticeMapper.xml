@@ -16,6 +16,7 @@
     <result column="notice_to_user_name" property="noticeToUserName" jdbcType="VARCHAR" />
     <result column="notice_type" property="noticeType" jdbcType="VARCHAR" />
     <result column="action_accepter" property="actionAccepter" jdbcType="INTEGER" />
+    <result column="notice_module" property="noticeModule" jdbcType="VARCHAR" />
     <result column="notice_content" property="noticeContent" jdbcType="LONGVARCHAR" />
   </resultMap>
 </mapper>

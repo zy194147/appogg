@@ -42,7 +42,7 @@ public class OggNotice {
     private String noticeToUserName;
 
     /**
-     * article:文章通知，soft:软件通知，need:需求通知，system:系统通知
+     * comment:评论相关,leaveMsg:留言相关,system:系统通知相关
      */
     @Column(name = "notice_type")
     private String noticeType;
@@ -52,6 +52,12 @@ public class OggNotice {
      */
     @Column(name = "action_accepter")
     private Integer actionAccepter;
+
+    /**
+     * article:文章通知，soft:软件通知，need需求通知
+     */
+    @Column(name = "notice_module")
+    private String noticeModule;
 
     @Column(name = "notice_content")
     private String noticeContent;
@@ -195,18 +201,18 @@ public class OggNotice {
     }
 
     /**
-     * 获取article:文章通知，soft:软件通知，need:需求通知，system:系统通知
+     * 获取comment:评论相关,leaveMsg:留言相关,system:系统通知相关
      *
-     * @return notice_type - article:文章通知，soft:软件通知，need:需求通知，system:系统通知
+     * @return notice_type - comment:评论相关,leaveMsg:留言相关,system:系统通知相关
      */
     public String getNoticeType() {
         return noticeType;
     }
 
     /**
-     * 设置article:文章通知，soft:软件通知，need:需求通知，system:系统通知
+     * 设置comment:评论相关,leaveMsg:留言相关,system:系统通知相关
      *
-     * @param noticeType article:文章通知，soft:软件通知，need:需求通知，system:系统通知
+     * @param noticeType comment:评论相关,leaveMsg:留言相关,system:系统通知相关
      */
     public void setNoticeType(String noticeType) {
         this.noticeType = noticeType;
@@ -228,6 +234,24 @@ public class OggNotice {
      */
     public void setActionAccepter(Integer actionAccepter) {
         this.actionAccepter = actionAccepter;
+    }
+
+    /**
+     * 获取article:文章通知，soft:软件通知，need需求通知
+     *
+     * @return notice_module - article:文章通知，soft:软件通知，need需求通知
+     */
+    public String getNoticeModule() {
+        return noticeModule;
+    }
+
+    /**
+     * 设置article:文章通知，soft:软件通知，need需求通知
+     *
+     * @param noticeModule article:文章通知，soft:软件通知，need需求通知
+     */
+    public void setNoticeModule(String noticeModule) {
+        this.noticeModule = noticeModule;
     }
 
     /**
