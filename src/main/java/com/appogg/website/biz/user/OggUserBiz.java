@@ -58,10 +58,14 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
         OggUser userForBase = this.mapper.selectByUserName(user.getUserName());
         if (userForBase == null) {
             jsonObject.put("message", "登录失败,用户不存在");
+            jsonObject.put("status", "10010");
+
             return new ObjectRestResponse().data(jsonObject);
         } else {
             if (!userForBase.getUserPassword().equals(user.getUserPassword())) {
                 jsonObject.put("message", "登录失败,密码错误");
+                jsonObject.put("status", "10011");
+
                 return new ObjectRestResponse().data(jsonObject);
             } else {
                 String token = tokenBiz.getToken(userForBase);
@@ -77,6 +81,8 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
                     redisUtils.set(token, userString);
                 } catch (IOException e) {
                     jsonObject.put("message", "登录失败,序列化对象失败");
+                    jsonObject.put("status", "10012");
+
                     return new ObjectRestResponse().data(jsonObject);
                 }
                 jsonObject.put("token", token);

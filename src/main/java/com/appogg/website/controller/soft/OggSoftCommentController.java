@@ -16,7 +16,7 @@ import java.util.Map;
 @RequestMapping("/soft/comment/")
 public class OggSoftCommentController extends BaseController<OggSoftCommentBiz,OggSoftComment> {
     @RequestMapping("detail")
-    public TableResultResponse selectCommentBySoftId(@RequestParam Map<String,Object> params){
+    public ObjectRestResponse selectCommentBySoftId(@RequestParam Map<String,Object> params){
         Query query = new Query(params);
         return this.baseBiz.selectCommentByQuery(query);
     }

@@ -35,7 +35,7 @@ public class OggSoftCommentBiz extends BaseBiz<OggSoftCommentMapper, OggSoftComm
     @Autowired
     private OggUserMapper userMapper;
 
-    public TableResultResponse selectCommentByQuery(Query query) {
+    public ObjectRestResponse selectCommentByQuery(Query query) {
         Class<OggSoftComment> clazz = (Class<OggSoftComment>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         Example example = new Example(clazz);
         if (query.entrySet().size() > 0) {
@@ -46,11 +46,11 @@ public class OggSoftCommentBiz extends BaseBiz<OggSoftCommentMapper, OggSoftComm
         }
 
         // 分页
-        Page<Object> result = PageHelper.startPage(query.getPage(), query.getLimit());
+//        Page<Object> result = PageHelper.startPage(query.getPage(), query.getLimit());
         List<OggSoftComment> list = mapper.selectByExample(example);
         List<CommentListVo> commentListVoList = getCommentList(list);
 
-        return new TableResultResponse<CommentListVo>(result.getTotal(), commentListVoList);
+        return new ObjectRestResponse().data(commentListVoList);
     }
 
 
@@ -93,10 +93,10 @@ public class OggSoftCommentBiz extends BaseBiz<OggSoftCommentMapper, OggSoftComm
         softComment.setHelpfulNum(0);
         softComment.setUnhelpfulNum(0);
         softComment.setCommentSoftId(commentVO.getCommentSoftId());
-        softComment.setParentId(0);
+        softComment.setParentId(commentVO.getCommentParentId());
         softComment.setPath(",1");
-        softComment.setBackToUserId(0);
-        softComment.setBackToUserName(null);
+        softComment.setBackToUserId(commentVO.getBackToUserId());
+        softComment.setBackToUserName(commentVO.getBackToUserName());
 
 
 
@@ -110,7 +110,7 @@ public class OggSoftCommentBiz extends BaseBiz<OggSoftCommentMapper, OggSoftComm
         OggNotice notice = new OggNotice();
         notice.setCreateDateTime(new Date());
         notice.setModifyDateTime(new Date());
-        notice.setNoticeType("article");
+        notice.setNoticeType("comment");
         notice.setActionFromUserId(user.getId());
         notice.setActionFromUserName(user.getUserName());
         notice.setNoticeToUserId(soft.getCreateUserId());
@@ -120,6 +120,7 @@ public class OggSoftCommentBiz extends BaseBiz<OggSoftCommentMapper, OggSoftComm
         notice.setReadStatus(new Byte((byte) 0));
         notice.setNoticeContent(notice.getActionFromUserName() + " 在" + notice.getCreateDateTime() + " 评论了你的软件");
         notice.setActionAccepter(commentVO.getCommentSoftId());
+        notice.setNoticeModule("soft");
         noticeMapper.insert(notice);
 
 

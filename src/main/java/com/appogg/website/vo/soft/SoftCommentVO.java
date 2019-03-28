@@ -5,7 +5,37 @@ public class SoftCommentVO {
 
     private int commentUserId;
 
+    private int commentParentId;
+
     private int commentSoftId;
+
+    private int backToUserId;
+
+    private String backToUserName;
+
+    public int getCommentParentId() {
+        return commentParentId;
+    }
+
+    public void setCommentParentId(int commentParentId) {
+        this.commentParentId = commentParentId;
+    }
+
+    public int getBackToUserId() {
+        return backToUserId;
+    }
+
+    public void setBackToUserId(int backToUserId) {
+        this.backToUserId = backToUserId;
+    }
+
+    public String getBackToUserName() {
+        return backToUserName;
+    }
+
+    public void setBackToUserName(String backToUserName) {
+        this.backToUserName = backToUserName;
+    }
 
     public int getCommentUserId() {
         return commentUserId;

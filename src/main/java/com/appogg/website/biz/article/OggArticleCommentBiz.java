@@ -119,7 +119,7 @@ public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper, OggAr
         OggNotice notice = new OggNotice();
         notice.setCreateDateTime(new Date());
         notice.setModifyDateTime(new Date());
-        notice.setNoticeType("article");
+        notice.setNoticeType("comment");
         notice.setActionFromUserId(user.getId());
         notice.setActionFromUserName(user.getUserName());
         notice.setNoticeToUserId(article.getCreateUserId());
@@ -129,6 +129,8 @@ public class OggArticleCommentBiz extends BaseBiz<OggArticleCommentMapper, OggAr
         notice.setReadStatus(new Byte((byte) 0));
         notice.setNoticeContent(notice.getActionFromUserName() + " 在" + notice.getCreateDateTime() + " 评论了你的文章");
         notice.setActionAccepter(commentVO.getCommentArticleId());
+        notice.setNoticeModule("article");
+
         noticeMapper.insert(notice);
 
 

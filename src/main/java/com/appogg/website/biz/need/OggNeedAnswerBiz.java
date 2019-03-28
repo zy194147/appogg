@@ -114,7 +114,7 @@ public class OggNeedAnswerBiz extends BaseBiz<OggNeedAnswerMapper,OggNeedAnswer>
         OggNotice notice = new OggNotice();
         notice.setCreateDateTime(new Date());
         notice.setModifyDateTime(new Date());
-        notice.setNoticeType("article");
+        notice.setNoticeType("comment");
         notice.setActionFromUserId(user.getId());
         notice.setActionFromUserName(user.getUserName());
         notice.setNoticeToUserId(need.getCreateUserId());
@@ -124,6 +124,8 @@ public class OggNeedAnswerBiz extends BaseBiz<OggNeedAnswerMapper,OggNeedAnswer>
         notice.setReadStatus(new Byte((byte) 0));
         notice.setNoticeContent(notice.getActionFromUserName() + " 在" + notice.getCreateDateTime() + " 评论了你的软件");
         notice.setActionAccepter(answerVO.getAnswerNeedId());
+        notice.setNoticeModule("need");
+
         noticeMapper.insert(notice);
 
         return new ObjectRestResponse().data("ok");

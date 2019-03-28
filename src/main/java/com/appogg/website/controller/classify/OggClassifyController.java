@@ -18,7 +18,7 @@ import java.util.Map;
 public class OggClassifyController extends BaseController<OggClassifyBiz,OggClassify> {
 
     @GetMapping("list")
-    public TableResultResponse listClassify(@RequestParam Map<String,Object> params){
+    public ObjectRestResponse listClassify(@RequestParam Map<String,Object> params){
         Query query = new Query(params);
         return this.baseBiz.listClassify(query);
     }

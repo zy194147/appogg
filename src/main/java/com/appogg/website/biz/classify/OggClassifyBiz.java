@@ -21,10 +21,10 @@ import java.util.Map;
 public class OggClassifyBiz extends BaseBiz<OggClassifyMapper, OggClassify> {
 
 
-    public TableResultResponse listClassify(Query query) {
+    public ObjectRestResponse listClassify(Query query) {
 
         List<OggClassify> softList;
-        Page result = PageHelper.startPage(query.getPage(), query.getLimit());
+//        Page result = PageHelper.startPage(query.getPage(), query.getLimit());
 
         Example example = new Example(OggClassify.class);
         if (query.entrySet().size() > 0) {
@@ -40,7 +40,8 @@ public class OggClassifyBiz extends BaseBiz<OggClassifyMapper, OggClassify> {
         } else {
             softList = this.mapper.selectAll();
         }
-        return new TableResultResponse<>(result.getTotal(), softList);
+
+        return new ObjectRestResponse<>().data(softList);
     }
 
     public ObjectRestResponse addClassify(ClassifyVO classifyVO) {
