@@ -58,13 +58,13 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
         OggUser userForBase = this.mapper.selectByUserName(user.getUserName());
         if (userForBase == null) {
             jsonObject.put("message", "登录失败,用户不存在");
-            jsonObject.put("status", "10010");
+            jsonObject.put("status", 10010);
 
             return new ObjectRestResponse().data(jsonObject);
         } else {
             if (!userForBase.getUserPassword().equals(user.getUserPassword())) {
                 jsonObject.put("message", "登录失败,密码错误");
-                jsonObject.put("status", "10011");
+                jsonObject.put("status", 10011);
 
                 return new ObjectRestResponse().data(jsonObject);
             } else {
@@ -81,7 +81,7 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
                     redisUtils.set(token, userString);
                 } catch (IOException e) {
                     jsonObject.put("message", "登录失败,序列化对象失败");
-                    jsonObject.put("status", "10012");
+                    jsonObject.put("status", 10012);
 
                     return new ObjectRestResponse().data(jsonObject);
                 }
@@ -112,6 +112,7 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
             user.setMemberLevelId("1");
             user.setMemberLevelName("普通会员");
             user.setIsDestroy(new Byte((byte) 0));
+            user.setUserSex(new Byte((byte) 0));
             user.setUserIntroduce("暂无任何简介");
             user.setUserHeadIcon("http://149.28.144.141/image/39db2230-69b8-452a-b423-f36a8df20718.jpg");
             user.setUserPageIcon("http://149.28.144.141/image/77e8009f-eed3-4931-ab22-8b836d834d57.jpeg");
@@ -119,7 +120,7 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
             user.setArticleNum(0);
 
             this.mapper.insert(user);
-            jsonObject.put("status",200);
+            jsonObject.put("status", 200);
             jsonObject.put("message", "注册成功");
 
             // 生成一条系统通知
@@ -139,6 +140,42 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
 
             return new ObjectRestResponse().data(jsonObject);
 
+        }
+    }
+
+    /**
+     * 更新用户信息
+     *
+     * @param user
+     * @return
+     */
+    public ObjectRestResponse updateUserMsg(OggUser user) {
+        this.mapper.updateByPrimaryKeySelective(user);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status", 0);
+        jsonObject.put("message", "成功");
+        return new ObjectRestResponse().data(jsonObject);
+
+    }
+
+    /**
+     * 注册
+     *
+     * @param user
+     * @return
+     */
+    public ObjectRestResponse checkNameExist(OggUser user) {
+
+        JSONObject jsonObject = new JSONObject();
+        OggUser userForBase = this.mapper.selectByUserName(user.getUserName());
+        if (userForBase != null) {
+            jsonObject.put("message", "用户已存在");
+            jsonObject.put("status", 1);
+            return new ObjectRestResponse().data(jsonObject);
+        } else {
+            jsonObject.put("message", "用户不存在");
+            jsonObject.put("status", 0);
+            return new ObjectRestResponse().data(jsonObject);
         }
     }
 
@@ -183,9 +220,9 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
                 userVO.setArticleReadNum(user.getArticleReadNum());
             }
         }
+        System.out.println(userVO.getUserSex());
         return new ObjectRestResponse().rel(true).data(userVO);
     }
-
 
 
     public TableResultResponse listArticles(Query query) {
@@ -232,11 +269,11 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
         return new TableResultResponse<>(result.getTotal(), softList);
     }
 
-    public TableResultResponse listNeeds(Query query){
+    public TableResultResponse listNeeds(Query query) {
 
         List<OggNeed> needList = new ArrayList<>();
         List<NeedListVo> needListVoList = new ArrayList<>();
-        Page result = PageHelper.startPage(query.getPage(),query.getLimit());
+        Page result = PageHelper.startPage(query.getPage(), query.getLimit());
 
         Example example = new Example(OggNeed.class);
         if (query.entrySet().size() > 0) {
@@ -244,7 +281,7 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
             for (Map.Entry<String, Object> entry : query.entrySet()) {
                 if (StringUtils.isNotBlank(entry.getValue().toString())) {
                     if ("userId".equals(entry.getKey())) {
-                        criteria.andEqualTo("createUserId",entry.getValue());
+                        criteria.andEqualTo("createUserId", entry.getValue());
                     }
                 }
             }
@@ -252,7 +289,7 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
             needList = needMapper.selectByExample(example);
         }
 
-        return new TableResultResponse<>(result.getTotal(),needList);
+        return new TableResultResponse<>(result.getTotal(), needList);
     }
 
 }

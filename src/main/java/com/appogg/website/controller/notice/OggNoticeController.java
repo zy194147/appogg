@@ -5,10 +5,7 @@ import com.appogg.website.entity.OggNotice;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.rest.BaseController;
 import com.appogg.website.util.Query;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -40,5 +37,12 @@ public class OggNoticeController extends BaseController<OggNoticeBiz,OggNotice> 
         Query query = new Query(params);
         return this.baseBiz.setCommentNoticeRead(query);
     }
+
+    @PostMapping("sendGlobal")
+    public ObjectRestResponse sendGlobalNotice(@RequestBody OggNotice notice){
+        return this.baseBiz.sendGlobalNotice(notice);
+    }
+
+
 
 }

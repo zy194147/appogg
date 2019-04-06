@@ -1,4 +1,3 @@
-/*
 package com.appogg.website.util;
 
 import java.security.MessageDigest;
@@ -32,5 +31,12 @@ public class PasswordSecurity {
         }
         return jmStr;
     }
+
+    public static void main(String[] args) {
+//        String pass = "&%5123***&&%%$$#@";]5uF)Et$X)V_JBM3
+        // 密码加密规则     pass+用户密码     后使用md5加密
+        String pass = "[9wZ)@To&4h%M&.#_DL]";
+        System.out.println("1:" + toMd5("xtayzz"));
+        System.out.println("2:" + toMd5(pass + "xtayzz"));
+    }
 }
-*/

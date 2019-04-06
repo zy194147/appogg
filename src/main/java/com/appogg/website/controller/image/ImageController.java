@@ -38,7 +38,7 @@ public class ImageController {
             e.printStackTrace();
         }
         String imageSrc = "http://149.28.144.141/image/" + fileName;
-//        String imageSrc = "http://149.28.144.141/image/" + "a55c4762-a3bf-4fe0-a427-21ec3c1f6a1c.jpg";
+//        String imageSrc = "http://149.28.144.141/image/" + "c776cc8b-7e6d-4b8a-a30b-708d9e48f6ec.jpg";
 
         System.out.println("filename:" + imageSrc);
 

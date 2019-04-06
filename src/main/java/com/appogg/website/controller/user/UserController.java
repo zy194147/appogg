@@ -40,6 +40,22 @@ public class UserController extends BaseController<OggUserBiz,OggUser> {
     public ObjectRestResponse signUp(@RequestBody OggUser user){
         return this.baseBiz.userSignUp(user);
     }
+    //检测用户名是否已被注册
+    @PostMapping("/checkNameExist")
+    public ObjectRestResponse checkNameExist(@RequestBody OggUser user){
+        return this.baseBiz.checkNameExist(user);
+    }
+
+
+
+
+
+
+    //检测用户名是否已被注册
+    @PostMapping("/updateMsg")
+    public ObjectRestResponse updateUserMsg(@RequestBody OggUser user){
+        return this.baseBiz.updateUserMsg(user);
+    }
 
     @UserLoginToken
     @GetMapping("/getMessage")

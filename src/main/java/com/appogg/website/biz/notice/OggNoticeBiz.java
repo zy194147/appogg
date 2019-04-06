@@ -93,6 +93,42 @@ public class OggNoticeBiz extends BaseBiz<OggNoticeMapper,OggNotice> {
         return new ObjectRestResponse().data("ok");
     }
 
+    public ObjectRestResponse sendGlobalNotice(OggNotice sendNotice){
+        List<OggUser> userList = this.userMapper.selectAll();
+        for(OggUser user:userList){
+            OggNotice notice = new OggNotice();
+            notice.setNoticeContent(sendNotice.getNoticeContent());
+            notice.setCreateDateTime(new Date());
+            notice.setModifyDateTime(new Date());
+            notice.setActionFromUserId(0);
+            notice.setActionFromUserName("system");
+            notice.setIsDelete(new Byte((byte) 0));
+            notice.setNoticeToUserId(user.getId());
+            notice.setNoticeToUserName(user.getUserName());
+            notice.setNoticeType("system");
+            notice.setActionAccepter(0);
+            notice.setNoticeModule("system");
+            notice.setReadStatus(new Byte((byte) 0));
+            this.mapper.insert(notice);
+        }
+//        OggNotice notice = new OggNotice();
+//        notice.setNoticeContent(sendNotice.getNoticeContent());
+//        notice.setCreateDateTime(new Date());
+//        notice.setModifyDateTime(new Date());
+//        notice.setActionFromUserId(0);
+//        notice.setActionFromUserName("system");
+//        notice.setIsDelete(new Byte((byte) 0));
+//        notice.setNoticeToUserId(0);
+//        notice.setNoticeToUserName("all");
+//        notice.setNoticeType("system");
+//        notice.setActionAccepter(0);
+//        notice.setNoticeModule("system");
+//        notice.setReadStatus(new Byte((byte) 0));
+//
+//        this.mapper.insert(notice);
+        return new ObjectRestResponse().data("ok");
+    }
+
     public ObjectRestResponse getNotReadNoticeTotal(Query query){
 
         Example example = new Example(OggNotice.class);
