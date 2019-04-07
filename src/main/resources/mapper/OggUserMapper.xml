@@ -9,22 +9,29 @@
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
     <result column="user_email" property="userEmail" jdbcType="VARCHAR" />
     <result column="user_password" property="userPassword" jdbcType="VARCHAR" />
-    <result column="member_level_id" property="memberLevelId" jdbcType="VARCHAR" />
+    <result column="member_level_id" property="memberLevelId" jdbcType="INTEGER" />
     <result column="member_level_name" property="memberLevelName" jdbcType="VARCHAR" />
     <result column="user_city" property="userCity" jdbcType="VARCHAR" />
     <result column="user_sex" property="userSex" jdbcType="TINYINT" />
     <result column="user_introduce" property="userIntroduce" jdbcType="VARCHAR" />
-    <result column="user_head_icon" property="userHeadIcon" jdbcType="VARCHAR" />
-    <result column="user_page_icon" property="userPageIcon" jdbcType="VARCHAR" />
     <result column="is_destroy" property="isDestroy" jdbcType="TINYINT" />
     <result column="create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
     <result column="article_num" property="articleNum" jdbcType="INTEGER" />
     <result column="article_read_num" property="articleReadNum" jdbcType="INTEGER" />
+    <result column="user_nickname" property="userNickname" jdbcType="VARCHAR" />
+    <result column="user_head_icon" property="userHeadIcon" jdbcType="LONGVARCHAR" />
+    <result column="user_page_icon" property="userPageIcon" jdbcType="LONGVARCHAR" />
   </resultMap>
-
   <select id="selectByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select id,user_name,user_email,user_password,member_level_id,member_level_name,user_city,user_sex,
-    user_introduce,user_head_icon,user_page_icon,is_destroy,create_date_time,article_num,article_read_num from ogg_user where user_name=#{userName}
+        select id,user_name,user_email,user_password,member_level_id,member_level_name,user_city,user_sex,
+        user_introduce,user_head_icon,user_page_icon,is_destroy,create_date_time,article_num,article_read_num,
+        user_nickname from ogg_user where user_name=#{userName}
 
-  </select>
+</select>
+  <select id="selectByUserEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select id,user_name,user_email,user_password,member_level_id,member_level_name,user_city,user_sex,
+        user_introduce,user_head_icon,user_page_icon,is_destroy,create_date_time,article_num,article_read_num,
+        user_nickname from ogg_user where user_email=#{userEmail}
+
+</select>
 </mapper>

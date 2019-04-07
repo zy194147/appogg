@@ -5,3 +5,4 @@ import tk.mybatis.mapper.common.Mapper;
 
 public interface OggSoftMapper extends Mapper<OggSoft> {
 }
+

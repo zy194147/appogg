@@ -3,8 +3,10 @@ package com.appogg.website.biz.need;
 import com.appogg.website.auth.UserCheck;
 import com.appogg.website.biz.BaseBiz;
 import com.appogg.website.entity.OggArticle;
+import com.appogg.website.entity.OggAuth;
 import com.appogg.website.entity.OggNeed;
 import com.appogg.website.entity.OggUser;
+import com.appogg.website.mapper.OggAuthMapper;
 import com.appogg.website.mapper.OggNeedMapper;
 import com.appogg.website.mapper.OggUserMapper;
 import com.appogg.website.msg.ObjectRestResponse;
@@ -31,6 +33,10 @@ public class OggNeedBiz extends BaseBiz<OggNeedMapper,OggNeed> {
 
     @Autowired
     private UserCheck userCheck;
+
+    @Autowired
+    private OggAuthMapper authMapper;
+
 
     public ObjectRestResponse insertNeedMsg(NeedVo needVo, HttpServletRequest request){
         OggUser loginUser = userCheck.getLoginUser(request);
@@ -85,7 +91,7 @@ public class OggNeedBiz extends BaseBiz<OggNeedMapper,OggNeed> {
                     }
                 }
             }
-            example.setOrderByClause("is_solved desc");
+            example.setOrderByClause("is_solved desc,create_date_time desc");
             needList = this.mapper.selectByExample(example);
         } else {
             needList = this.mapper.selectAll();
@@ -200,6 +206,10 @@ public class OggNeedBiz extends BaseBiz<OggNeedMapper,OggNeed> {
 
         OggUser user = userMapper.selectByPrimaryKey(need.getCreateUserId());
         needListVo.setUserHeadIcon(user.getUserHeadIcon());
+
+        OggAuth auth = authMapper.selectByPrimaryKey(user.getMemberLevelId());
+        needListVo.setUserAuthName(auth.getAuthName());
+        needListVo.setUserAuthIcon(auth.getAuthIcon());
 
         return needListVo;
     }

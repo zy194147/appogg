@@ -50,18 +50,18 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
     private OggNeedMapper needMapper;
 
     @Autowired
+    private OggAuthMapper authMapper;
+
+    @Autowired
     TokenBiz tokenBiz;
 
     public ObjectRestResponse userLogin(OggUser user) {
 
         JSONObject jsonObject = new JSONObject();
         OggUser userForBase = this.mapper.selectByUserName(user.getUserName());
-        if (userForBase == null) {
-            jsonObject.put("message", "登录失败,用户不存在");
-            jsonObject.put("status", 10010);
-
-            return new ObjectRestResponse().data(jsonObject);
-        } else {
+        OggUser userForBaseByEmail = this.mapper.selectByUserEmail(user.getUserName());
+        // 使用用户名登录
+        if (userForBase != null) {
             if (!userForBase.getUserPassword().equals(user.getUserPassword())) {
                 jsonObject.put("message", "登录失败,密码错误");
                 jsonObject.put("status", 10011);
@@ -90,6 +90,41 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
 
                 return new ObjectRestResponse().data(jsonObject);
             }
+            // 使用邮箱登录
+        } else if (userForBaseByEmail != null) {
+            if (!userForBaseByEmail.getUserPassword().equals(user.getUserPassword())) {
+                jsonObject.put("message", "登录失败,密码错误");
+                jsonObject.put("status", 10011);
+
+                return new ObjectRestResponse().data(jsonObject);
+            } else {
+                String token = tokenBiz.getToken(userForBaseByEmail);
+                try {
+                    String userString = SerializeUtils.serialize(userForBaseByEmail);
+                    System.out.println("序列字符串:" + userString);
+                    try {
+                        OggUser user1 = (OggUser) SerializeUtils.serializeToObject(userString);
+                        System.out.println("序列字duixiang:" + user1);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    redisUtils.set(token, userString);
+                } catch (IOException e) {
+                    jsonObject.put("message", "登录失败,序列化对象失败");
+                    jsonObject.put("status", 10012);
+
+                    return new ObjectRestResponse().data(jsonObject);
+                }
+                jsonObject.put("token", token);
+                jsonObject.put("user", userForBaseByEmail);
+
+                return new ObjectRestResponse().data(jsonObject);
+            }
+        } else {
+            jsonObject.put("message", "登录失败,用户不存在");
+            jsonObject.put("status", 10010);
+
+            return new ObjectRestResponse().data(jsonObject);
         }
     }
 
@@ -103,14 +138,22 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
 
         JSONObject jsonObject = new JSONObject();
         OggUser userForBase = this.mapper.selectByUserName(user.getUserName());
+        OggUser userForBaseByEmail = this.mapper.selectByUserEmail(user.getUserEmail());
+
         if (userForBase != null) {
             jsonObject.put("message", "注册失败，用户已存在");
             jsonObject.put("status", 1);
             return new ObjectRestResponse().data(jsonObject);
+        }
+        if (userForBaseByEmail != null) {
+            jsonObject.put("message", "注册失败，该邮箱已被注册");
+            jsonObject.put("status", 2);
+            return new ObjectRestResponse().data(jsonObject);
         } else {
+
             user.setCreateDateTime(new Date());
-            user.setMemberLevelId("1");
-            user.setMemberLevelName("普通会员");
+            user.setMemberLevelId(1);
+            user.setMemberLevelName("灰钻会员");
             user.setIsDestroy(new Byte((byte) 0));
             user.setUserSex(new Byte((byte) 0));
             user.setUserIntroduce("暂无任何简介");
@@ -206,6 +249,7 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
             }
             if (userId != 0) {
                 user = this.mapper.selectByPrimaryKey(userId);
+                OggAuth auth = authMapper.selectByPrimaryKey(user.getMemberLevelId());
                 userVO.setId(user.getId());
                 userVO.setUserName(user.getUserName());
                 userVO.setMemberLevelId(user.getMemberLevelId());
@@ -218,6 +262,9 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
                 userVO.setCreateDateTime(user.getCreateDateTime());
                 userVO.setArticleNum(user.getArticleNum());
                 userVO.setArticleReadNum(user.getArticleReadNum());
+
+                userVO.setUserAuthName(auth.getAuthName());
+                userVO.setUserAuthIcon(auth.getAuthIcon());
             }
         }
         System.out.println(userVO.getUserSex());

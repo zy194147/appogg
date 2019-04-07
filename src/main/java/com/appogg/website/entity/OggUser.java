@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Table(name = "ogg_user")
 public class OggUser implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "user_name")
@@ -23,7 +22,7 @@ public class OggUser implements Serializable {
      * 会员等级id
      */
     @Column(name = "member_level_id")
-    private String memberLevelId;
+    private Integer memberLevelId;
 
     /**
      * 会员等级名称
@@ -50,18 +49,6 @@ public class OggUser implements Serializable {
     private String userIntroduce;
 
     /**
-     * 头像
-     */
-    @Column(name = "user_head_icon")
-    private String userHeadIcon;
-
-    /**
-     * 用户页面顶部背景图
-     */
-    @Column(name = "user_page_icon")
-    private String userPageIcon;
-
-    /**
      * 账号销毁
      */
     @Column(name = "is_destroy")
@@ -84,6 +71,21 @@ public class OggUser implements Serializable {
      */
     @Column(name = "article_read_num")
     private Integer articleReadNum;
+
+    @Column(name = "user_nickname")
+    private String userNickname;
+
+    /**
+     * 头像
+     */
+    @Column(name = "user_head_icon")
+    private String userHeadIcon;
+
+    /**
+     * 用户页面顶部背景图
+     */
+    @Column(name = "user_page_icon")
+    private String userPageIcon;
 
     /**
      * @return id
@@ -146,7 +148,7 @@ public class OggUser implements Serializable {
      *
      * @return member_level_id - 会员等级id
      */
-    public String getMemberLevelId() {
+    public Integer getMemberLevelId() {
         return memberLevelId;
     }
 
@@ -155,7 +157,7 @@ public class OggUser implements Serializable {
      *
      * @param memberLevelId 会员等级id
      */
-    public void setMemberLevelId(String memberLevelId) {
+    public void setMemberLevelId(Integer memberLevelId) {
         this.memberLevelId = memberLevelId;
     }
 
@@ -232,42 +234,6 @@ public class OggUser implements Serializable {
     }
 
     /**
-     * 获取头像
-     *
-     * @return user_head_icon - 头像
-     */
-    public String getUserHeadIcon() {
-        return userHeadIcon;
-    }
-
-    /**
-     * 设置头像
-     *
-     * @param userHeadIcon 头像
-     */
-    public void setUserHeadIcon(String userHeadIcon) {
-        this.userHeadIcon = userHeadIcon;
-    }
-
-    /**
-     * 获取用户页面顶部背景图
-     *
-     * @return user_page_icon - 用户页面顶部背景图
-     */
-    public String getUserPageIcon() {
-        return userPageIcon;
-    }
-
-    /**
-     * 设置用户页面顶部背景图
-     *
-     * @param userPageIcon 用户页面顶部背景图
-     */
-    public void setUserPageIcon(String userPageIcon) {
-        this.userPageIcon = userPageIcon;
-    }
-
-    /**
      * 获取账号销毁
      *
      * @return is_destroy - 账号销毁
@@ -336,29 +302,56 @@ public class OggUser implements Serializable {
      * @param articleReadNum 文章总总阅读量
      */
     public void setArticleReadNum(Integer articleReadNum) {
-
-
         this.articleReadNum = articleReadNum;
     }
 
-    @Override
-    public String toString() {
-        return "OggUser{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", userEmail='" + userEmail + '\'' +
-                ", userPassword='" + userPassword + '\'' +
-                ", memberLevelId='" + memberLevelId + '\'' +
-                ", memberLevelName='" + memberLevelName + '\'' +
-                ", userCity='" + userCity + '\'' +
-                ", userSex=" + userSex +
-                ", userIntroduce='" + userIntroduce + '\'' +
-                ", userHeadIcon='" + userHeadIcon + '\'' +
-                ", userPageIcon='" + userPageIcon + '\'' +
-                ", isDestroy=" + isDestroy +
-                ", createDateTime=" + createDateTime +
-                ", articleNum=" + articleNum +
-                ", articleReadNum=" + articleReadNum +
-                '}';
+    /**
+     * @return user_nickname
+     */
+    public String getUserNickname() {
+        return userNickname;
+    }
+
+    /**
+     * @param userNickname
+     */
+    public void setUserNickname(String userNickname) {
+        this.userNickname = userNickname;
+    }
+
+    /**
+     * 获取头像
+     *
+     * @return user_head_icon - 头像
+     */
+    public String getUserHeadIcon() {
+        return userHeadIcon;
+    }
+
+    /**
+     * 设置头像
+     *
+     * @param userHeadIcon 头像
+     */
+    public void setUserHeadIcon(String userHeadIcon) {
+        this.userHeadIcon = userHeadIcon;
+    }
+
+    /**
+     * 获取用户页面顶部背景图
+     *
+     * @return user_page_icon - 用户页面顶部背景图
+     */
+    public String getUserPageIcon() {
+        return userPageIcon;
+    }
+
+    /**
+     * 设置用户页面顶部背景图
+     *
+     * @param userPageIcon 用户页面顶部背景图
+     */
+    public void setUserPageIcon(String userPageIcon) {
+        this.userPageIcon = userPageIcon;
     }
 }

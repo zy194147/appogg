@@ -12,6 +12,25 @@ public class NeedListVo extends NeedVo {
 
     private String userHeadIcon;
 
+    private String userAuthName;
+    private String userAuthIcon;
+
+    public String getUserAuthName() {
+        return userAuthName;
+    }
+
+    public void setUserAuthName(String userAuthName) {
+        this.userAuthName = userAuthName;
+    }
+
+    public String getUserAuthIcon() {
+        return userAuthIcon;
+    }
+
+    public void setUserAuthIcon(String userAuthIcon) {
+        this.userAuthIcon = userAuthIcon;
+    }
+
     public String getUserHeadIcon() {
         return userHeadIcon;
     }

@@ -2,10 +2,10 @@ package com.appogg.website.biz.soft;
 
 import com.appogg.website.auth.UserCheck;
 import com.appogg.website.biz.BaseBiz;
-import com.appogg.website.entity.OggArticle;
-import com.appogg.website.entity.OggSoft;
+import com.appogg.website.entity.OggAuth;
 import com.appogg.website.entity.OggSoft;
 import com.appogg.website.entity.OggUser;
+import com.appogg.website.mapper.OggAuthMapper;
 import com.appogg.website.mapper.OggSoftMapper;
 import com.appogg.website.mapper.OggUserMapper;
 import com.appogg.website.msg.ObjectRestResponse;
@@ -30,6 +30,9 @@ public class OggSoftBiz extends BaseBiz<OggSoftMapper, OggSoft> {
     private OggUserMapper oggUserMapper;
     @Autowired
     private UserCheck userCheck;
+
+    @Autowired
+    private OggAuthMapper authMapper;
 
 
     public ObjectRestResponse insertSoftMsg(SoftVO softVO, HttpServletRequest request) {
@@ -183,6 +186,10 @@ public class OggSoftBiz extends BaseBiz<OggSoftMapper, OggSoft> {
         softListVO.setSoftTitleIcon(soft.getSoftTitleIcon());
         softListVO.setSoftDownloadAddr(soft.getSoftDownloadAddr().split(";"));
         softListVO.setUserHeadIcon(user.getUserHeadIcon());
+
+        OggAuth auth = authMapper.selectByPrimaryKey(user.getMemberLevelId());
+        softListVO.setUserAuthName(auth.getAuthName());
+        softListVO.setUserAuthIcon(auth.getAuthIcon());
         return softListVO;
     }
 

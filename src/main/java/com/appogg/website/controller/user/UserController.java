@@ -1,15 +1,12 @@
 package com.appogg.website.controller.user;
 
-import com.alibaba.fastjson.JSONObject;
 import com.appogg.website.annotation.UserLoginToken;
-import com.appogg.website.biz.token.TokenBiz;
 import com.appogg.website.biz.user.OggUserBiz;
 import com.appogg.website.entity.OggUser;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
 import com.appogg.website.rest.BaseController;
 import com.appogg.website.util.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,7 +62,6 @@ public class UserController extends BaseController<OggUserBiz,OggUser> {
 
     @RequestMapping("detail")
     public ObjectRestResponse userDetail(@RequestParam Map<String,Object> params){
-        System.out.println("userddddddddddddddddddd");
         Query query = new Query(params);
         return this.baseBiz.selectUserDetail(query);
     }

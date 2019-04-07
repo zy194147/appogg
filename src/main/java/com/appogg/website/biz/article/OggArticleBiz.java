@@ -3,15 +3,14 @@ package com.appogg.website.biz.article;
 import com.appogg.website.auth.UserCheck;
 import com.appogg.website.biz.BaseBiz;
 import com.appogg.website.entity.OggArticle;
+import com.appogg.website.entity.OggAuth;
 import com.appogg.website.entity.OggUser;
 import com.appogg.website.mapper.OggArticleMapper;
+import com.appogg.website.mapper.OggAuthMapper;
 import com.appogg.website.mapper.OggUserMapper;
 import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.msg.TableResultResponse;
-import com.appogg.website.util.EntityUtils;
 import com.appogg.website.util.Query;
-import com.appogg.website.util.RedisUtils;
-import com.appogg.website.util.SerializeUtils;
 import com.appogg.website.vo.article.ArticleListVo;
 import com.appogg.website.vo.article.ArticleVo;
 import com.github.pagehelper.Page;
@@ -20,10 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Encoder;
 import tk.mybatis.mapper.entity.Example;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +32,9 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
 
     @Autowired
     private OggUserMapper userMapper;
+
+    @Autowired
+    private OggAuthMapper authMapper;
 
     @Autowired
     private UserCheck userCheck;
@@ -121,6 +121,10 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
 
             OggUser user = userMapper.selectByPrimaryKey(article.getCreateUserId());
             articleListVo.setUserHeadIcon(user.getUserHeadIcon());
+
+            OggAuth auth = authMapper.selectByPrimaryKey(user.getMemberLevelId());
+            articleListVo.setUserAuthName(auth.getAuthName());
+            articleListVo.setUserAuthIcon(auth.getAuthIcon());
             articleListVoList.add(articleListVo);
         }
         return articleListVoList;

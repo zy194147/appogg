@@ -7,7 +7,7 @@ import java.util.Date;
 public class UserVO {
     private Integer id;
     private String userName;
-    private String memberLevelId;
+    private Integer memberLevelId;
 
     private String memberLevelName;
 
@@ -27,6 +27,25 @@ public class UserVO {
 
     private Integer articleReadNum;
 
+    private String userAuthName;
+    private String userAuthIcon;
+
+    public String getUserAuthName() {
+        return userAuthName;
+    }
+
+    public void setUserAuthName(String userAuthName) {
+        this.userAuthName = userAuthName;
+    }
+
+    public String getUserAuthIcon() {
+        return userAuthIcon;
+    }
+
+    public void setUserAuthIcon(String userAuthIcon) {
+        this.userAuthIcon = userAuthIcon;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -44,11 +63,11 @@ public class UserVO {
     }
 
 
-    public String getMemberLevelId() {
+    public Integer getMemberLevelId() {
         return memberLevelId;
     }
 
-    public void setMemberLevelId(String memberLevelId) {
+    public void setMemberLevelId(Integer memberLevelId) {
         this.memberLevelId = memberLevelId;
     }
 

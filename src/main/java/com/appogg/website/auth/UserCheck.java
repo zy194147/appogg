@@ -1,7 +1,6 @@
 package com.appogg.website.auth;
 
 import com.appogg.website.entity.OggUser;
-import com.appogg.website.msg.ObjectRestResponse;
 import com.appogg.website.util.RedisUtils;
 import com.appogg.website.util.SerializeUtils;
 import org.springframework.stereotype.Component;
