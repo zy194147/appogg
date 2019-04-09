@@ -8,7 +8,6 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
     <result column="modify_date_time" property="modifyDateTime" jdbcType="TIMESTAMP" />
-    <result column="article_title_icon" property="articleTitleIcon" jdbcType="VARCHAR" />
     <result column="article_title_name" property="articleTitleName" jdbcType="VARCHAR" />
     <result column="article_auth_id" property="articleAuthId" jdbcType="INTEGER" />
     <result column="article_classify_group" property="articleClassifyGroup" jdbcType="VARCHAR" />
@@ -24,6 +23,8 @@
     <result column="is_fine" property="isFine" jdbcType="TINYINT" />
     <result column="helpful_num" property="helpfulNum" jdbcType="INTEGER" />
     <result column="unhelpful_num" property="unhelpfulNum" jdbcType="INTEGER" />
+    <result column="is_edit" property="isEdit" jdbcType="TINYINT" />
+    <result column="article_title_icon" property="articleTitleIcon" jdbcType="LONGVARCHAR" />
     <result column="article_content" property="articleContent" jdbcType="LONGVARCHAR" />
   </resultMap>
 </mapper>

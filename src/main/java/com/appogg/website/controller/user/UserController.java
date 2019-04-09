@@ -73,6 +73,12 @@ public class UserController extends BaseController<OggUserBiz,OggUser> {
         return this.baseBiz.listArticles(query);
     }
 
+    @GetMapping("listArticleForVisitor")
+    public TableResultResponse listArticlesForVisitor(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return this.baseBiz.listArticlesForVisitor(query);
+    }
+
 
     @GetMapping("listSoft")
     public TableResultResponse listSofts(@RequestParam Map<String,Object> params){

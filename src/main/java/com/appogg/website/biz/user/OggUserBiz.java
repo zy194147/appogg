@@ -274,6 +274,7 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
 
     public TableResultResponse listArticles(Query query) {
 
+        System.out.println("=====================1");
         List<OggArticle> articleList = new ArrayList<>();
         Page result = PageHelper.startPage(query.getPage(), query.getLimit());
 
@@ -281,6 +282,29 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
         example.setOrderByClause("create_date_time desc");
         if (query.entrySet().size() > 0) {
             Example.Criteria criteria = example.createCriteria();
+            for (Map.Entry<String, Object> entry : query.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
+                    if ("userId".equals(entry.getKey())) {
+                        criteria.andEqualTo("createUserId", entry.getValue());
+                    }
+                }
+            }
+            articleList = articleMapper.selectByExample(example);
+        }
+        return new TableResultResponse<>(result.getTotal(), articleList);
+    }
+
+    public TableResultResponse listArticlesForVisitor(Query query) {
+
+        List<OggArticle> articleList = new ArrayList<>();
+        Page result = PageHelper.startPage(query.getPage(), query.getLimit());
+
+        Example example = new Example(OggArticle.class);
+        example.setOrderByClause("create_date_time desc");
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isEdit",0);
+        criteria.andEqualTo("articleAuthId",0);
+        if (query.entrySet().size() > 0) {
             for (Map.Entry<String, Object> entry : query.entrySet()) {
                 if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
                     if ("userId".equals(entry.getKey())) {

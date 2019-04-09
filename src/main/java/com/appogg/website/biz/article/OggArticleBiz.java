@@ -39,7 +39,7 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
     @Autowired
     private UserCheck userCheck;
 
-    public ObjectRestResponse insertArticleMsg(ArticleVo articleVo,HttpServletRequest request) {
+    public ObjectRestResponse insertArticleMsg(ArticleVo articleVo,HttpServletRequest request,Byte isEdit) {
 
         OggUser loginUser = userCheck.getLoginUser(request);
         System.out.println("asdkfasdk:" + loginUser);
@@ -66,10 +66,19 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
         article.setArticleSummary(articleVo.getArticleSummary());
         article.setArticleContent(articleVo.getArticleContent());
 
+        article.setIsEdit(isEdit);
+
         OggUser user = userMapper.selectByPrimaryKey(loginUser.getId());
         user.setArticleNum(user.getArticleNum()+1);
         userMapper.updateByPrimaryKeySelective(user);
-        this.mapper.insertSelective(article);
+        System.out.println("id::::" + articleVo.getId());
+
+        if(articleVo.getId() == 0){
+            this.mapper.insertSelective(article);
+        } else {
+            article.setId(articleVo.getId());
+            this.mapper.updateByPrimaryKey(article);
+        }
         return new ObjectRestResponse().rel(true).data("添加文章成功");
     }
 
@@ -80,8 +89,11 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
 
         Example example = new Example(OggArticle.class);
         example.setOrderByClause("create_date_time desc");
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("articleAuthId",0);
+        // 查询已发布的
+        criteria.andEqualTo("isEdit",0);
         if (query.entrySet().size() > 0) {
-            Example.Criteria criteria = example.createCriteria();
             for (Map.Entry<String, Object> entry : query.entrySet()) {
                 if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
                     if ("isFine".equals(entry.getKey())) {
@@ -89,12 +101,22 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
                     }
                 }
             }
-            articleList = this.mapper.selectByExample(example);
-        } else {
-            articleList = this.mapper.selectAll();
         }
+        articleList = this.mapper.selectByExample(example);
+        List<ArticleListVo> articleListVoList = new ArrayList<>();
+        articleListVoList = getArticleListVo(articleList);
 
+        return new TableResultResponse<>(result.getTotal(), articleListVoList);
+    }
 
+    public TableResultResponse listAllArticle(Query query) {
+
+        List<OggArticle> articleList;
+        Page result = PageHelper.startPage(query.getPage(), query.getLimit());
+        Example example = new Example(OggArticle.class);
+        example.setOrderByClause("create_date_time desc");
+        Example.Criteria criteria = example.createCriteria();
+        articleList = this.mapper.selectByExample(example);
         List<ArticleListVo> articleListVoList = new ArrayList<>();
         articleListVoList = getArticleListVo(articleList);
 
@@ -138,9 +160,10 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
         Page result = PageHelper.startPage(query.getPage(), query.getLimit());
         Example example = new Example(OggArticle.class);
         example.setOrderByClause("comment_num desc");
-
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("articleAuthId",0);
+        criteria.andEqualTo("isEdit",0);
         if (query.entrySet().size() > 0) {
-            Example.Criteria criteria = example.createCriteria();
             for (Map.Entry<String, Object> entry : query.entrySet()) {
                 if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
                     if ("createUserId".equals(entry.getKey())) {
@@ -148,10 +171,8 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
                     }
                 }
             }
-            articleList = this.mapper.selectByExample(example);
-        } else {
-            articleList = this.mapper.selectAll();
         }
+        articleList = this.mapper.selectByExample(example);
         for (OggArticle article : articleList) {
             ArticleVo articleVo = new ArticleVo();
             articleVo.setId(article.getId());
@@ -171,9 +192,11 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
         Page result = PageHelper.startPage(query.getPage(), query.getLimit());
         Example example = new Example(OggArticle.class);
         example.setOrderByClause("comment_num desc");
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isEdit",0);
+
 
         if (query.entrySet().size() > 0) {
-            Example.Criteria criteria = example.createCriteria();
             for (Map.Entry<String, Object> entry : query.entrySet()) {
                 if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
                     if ("createUserId".equals(entry.getKey())) {
@@ -181,8 +204,8 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
                     }
                 }
             }
-            articleList = this.mapper.selectByExample(example);
         }
+        articleList = this.mapper.selectByExample(example);
 
 //        articleList = this.mapper.selectByExample(example);
         for (OggArticle article : articleList) {
@@ -232,6 +255,9 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
         articleVo.setIsFine(article.getIsFine());
         articleVo.setCreateDateTime(article.getCreateDateTime());
         articleVo.setReadNum(article.getReadNum());
+        articleVo.setArticleSummary(article.getArticleSummary());
+        articleVo.setArticleAuthId(article.getArticleAuthId());
+        articleVo.setArticleTitleIcon(article.getArticleTitleIcon());
         return articleVo;
     }
 

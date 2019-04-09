@@ -15,19 +15,13 @@ public class OggArticle {
     private Date modifyDateTime;
 
     /**
-     * 文章标题图标
-     */
-    @Column(name = "article_title_icon")
-    private String articleTitleIcon;
-
-    /**
      * 文字标题名称
      */
     @Column(name = "article_title_name")
     private String articleTitleName;
 
     /**
-     * 文章权限
+     * 文章权限：0公开，1仅自己可见
      */
     @Column(name = "article_auth_id")
     private Integer articleAuthId;
@@ -105,6 +99,18 @@ public class OggArticle {
     private Integer unhelpfulNum;
 
     /**
+     * 是否为编辑状态；0已发布，1保存未发布
+     */
+    @Column(name = "is_edit")
+    private Byte isEdit;
+
+    /**
+     * 文章标题图标
+     */
+    @Column(name = "article_title_icon")
+    private String articleTitleIcon;
+
+    /**
      * 文章内容
      */
     @Column(name = "article_content")
@@ -153,24 +159,6 @@ public class OggArticle {
     }
 
     /**
-     * 获取文章标题图标
-     *
-     * @return article_title_icon - 文章标题图标
-     */
-    public String getArticleTitleIcon() {
-        return articleTitleIcon;
-    }
-
-    /**
-     * 设置文章标题图标
-     *
-     * @param articleTitleIcon 文章标题图标
-     */
-    public void setArticleTitleIcon(String articleTitleIcon) {
-        this.articleTitleIcon = articleTitleIcon;
-    }
-
-    /**
      * 获取文字标题名称
      *
      * @return article_title_name - 文字标题名称
@@ -189,18 +177,18 @@ public class OggArticle {
     }
 
     /**
-     * 获取文章权限
+     * 获取文章权限：0公开，1仅自己可见
      *
-     * @return article_auth_id - 文章权限
+     * @return article_auth_id - 文章权限：0公开，1仅自己可见
      */
     public Integer getArticleAuthId() {
         return articleAuthId;
     }
 
     /**
-     * 设置文章权限
+     * 设置文章权限：0公开，1仅自己可见
      *
-     * @param articleAuthId 文章权限
+     * @param articleAuthId 文章权限：0公开，1仅自己可见
      */
     public void setArticleAuthId(Integer articleAuthId) {
         this.articleAuthId = articleAuthId;
@@ -430,6 +418,42 @@ public class OggArticle {
      */
     public void setUnhelpfulNum(Integer unhelpfulNum) {
         this.unhelpfulNum = unhelpfulNum;
+    }
+
+    /**
+     * 获取是否为编辑状态；0已发布，1保存未发布
+     *
+     * @return is_edit - 是否为编辑状态；0已发布，1保存未发布
+     */
+    public Byte getIsEdit() {
+        return isEdit;
+    }
+
+    /**
+     * 设置是否为编辑状态；0已发布，1保存未发布
+     *
+     * @param isEdit 是否为编辑状态；0已发布，1保存未发布
+     */
+    public void setIsEdit(Byte isEdit) {
+        this.isEdit = isEdit;
+    }
+
+    /**
+     * 获取文章标题图标
+     *
+     * @return article_title_icon - 文章标题图标
+     */
+    public String getArticleTitleIcon() {
+        return articleTitleIcon;
+    }
+
+    /**
+     * 设置文章标题图标
+     *
+     * @param articleTitleIcon 文章标题图标
+     */
+    public void setArticleTitleIcon(String articleTitleIcon) {
+        this.articleTitleIcon = articleTitleIcon;
     }
 
     /**

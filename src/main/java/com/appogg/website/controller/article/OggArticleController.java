@@ -28,13 +28,34 @@ public class OggArticleController extends BaseController<OggArticleBiz,OggArticl
     @UserLoginToken
     @PostMapping("add")
     public ObjectRestResponse insertArticle(@RequestBody ArticleVo articleVo,HttpServletRequest request){
-        return this.baseBiz.insertArticleMsg(articleVo,request);
+        return this.baseBiz.insertArticleMsg(articleVo,request,new Byte((byte) 0));
+    }
+    /**
+     * 保存文章不发布
+     * @param articleVo
+     * @return
+     */
+    @UserLoginToken
+    @PostMapping("save")
+    public ObjectRestResponse saveArticle(@RequestBody ArticleVo articleVo,HttpServletRequest request){
+        return this.baseBiz.insertArticleMsg(articleVo,request,new Byte((byte) 1));
     }
 
     @GetMapping("list")
     public TableResultResponse listPublicArticle(@RequestParam Map<String,Object> params){
         Query query = new Query(params);
         return this.baseBiz.listPublicArticleMsg(query);
+    }
+
+    /**
+     * 列出所有权限的文章
+     * @param params
+     * @return
+     */
+    @GetMapping("listAll")
+    public TableResultResponse listAllArticle(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return this.baseBiz.listAllArticle(query);
     }
     @GetMapping("trendingList")
     public TableResultResponse listTrendingSoft(@RequestParam Map<String,Object> params){
