@@ -77,8 +77,8 @@ public class OggSoftBiz extends BaseBiz<OggSoftMapper, OggSoft> {
         Page result = PageHelper.startPage(query.getPage(), query.getLimit());
 
         Example example = new Example(OggSoft.class);
+        Example.Criteria criteria = example.createCriteria();
         if (query.entrySet().size() > 0) {
-            Example.Criteria criteria = example.createCriteria();
             for (Map.Entry<String, Object> entry : query.entrySet()) {
                 if (StringUtils.isNotBlank(entry.getValue().toString()) && !"0".equals(entry.getValue().toString())) {
                     if ("softSystemPlatform".equals(entry.getKey())) {
@@ -87,10 +87,9 @@ public class OggSoftBiz extends BaseBiz<OggSoftMapper, OggSoft> {
                 }
             }
             example.setOrderByClause("create_date_time desc");
-            softList = this.mapper.selectByExample(example);
-        } else {
-            softList = this.mapper.selectAll();
         }
+        criteria.andEqualTo("isDelete",0);
+        softList = this.mapper.selectByExample(example);
         softListVOList = getSoftListData(softList);
         return new TableResultResponse<>(result.getTotal(), softListVOList);
     }
@@ -102,6 +101,8 @@ public class OggSoftBiz extends BaseBiz<OggSoftMapper, OggSoft> {
         List<SoftListVO> softListVOList = new ArrayList<>();
         Page result = PageHelper.startPage(query.getPage(), query.getLimit());
         Example example = new Example(OggSoft.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDelete",0);
         example.setOrderByClause("comment_num desc");
         softList = this.mapper.selectByExample(example);
         softListVOList = getSoftListData(softList);

@@ -51,6 +51,8 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
 
     @Autowired
     private OggAuthMapper authMapper;
+    @Autowired
+    private OggAuthGradeMapper authGradeMapper;
 
     @Autowired
     TokenBiz tokenBiz;
@@ -262,6 +264,7 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
                 userVO.setCreateDateTime(user.getCreateDateTime());
                 userVO.setArticleNum(user.getArticleNum());
                 userVO.setArticleReadNum(user.getArticleReadNum());
+                userVO.setUserEmail(user.getUserEmail());
 
                 userVO.setUserAuthName(auth.getAuthName());
                 userVO.setUserAuthIcon(auth.getAuthIcon());
@@ -269,6 +272,23 @@ public class OggUserBiz extends BaseBiz<OggUserMapper, OggUser> {
         }
         System.out.println(userVO.getUserSex());
         return new ObjectRestResponse().rel(true).data(userVO);
+    }
+
+
+
+    public TableResultResponse listMemberGrade(Query query) {
+        Page result = PageHelper.startPage(query.getPage(), query.getLimit());
+        List<OggAuth> authList = authMapper.selectAll();
+        return new TableResultResponse<>(result.getTotal(), authList);
+    }
+
+
+    public TableResultResponse listAuthGrade(Query query) {
+        Page result = PageHelper.startPage(query.getPage(), query.getLimit());
+        Example example = new Example(OggAuthGrade.class);
+        example.setOrderByClause("auth_grade_id");
+        List<OggAuthGrade> authGradeList = authGradeMapper.selectByExample(example);
+        return new TableResultResponse<>(result.getTotal(), authGradeList);
     }
 
 

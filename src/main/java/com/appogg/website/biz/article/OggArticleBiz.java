@@ -49,35 +49,42 @@ public class OggArticleBiz extends BaseBiz<OggArticleMapper, OggArticle> {
         }
 
         OggArticle article = new OggArticle();
-        article.setCreateDateTime(new Date());
-        article.setModifyDateTime(new Date());
-
         article.setCreateUserId(loginUser.getId());
         article.setCreateUserName(loginUser.getUserName());
-        article.setIsDelete(new Byte((byte) 0));
-        article.setReadNum(0);
-        article.setCommentNum(0);
-        article.setIsSticky(new Byte((byte) 0));
-        article.setIsFine(new Byte((byte) 0));
-        article.setArticleTitleIcon(articleVo.getArticleTitleIcon());
-        article.setArticleTitleName(articleVo.getArticleTitleName());
-        article.setArticleAuthId(articleVo.getArticleAuthId());
-        article.setArticleClassifyGroup(Arrays.toString(articleVo.getArticleClassifyGroup()));
-        article.setArticleSummary(articleVo.getArticleSummary());
-        article.setArticleContent(articleVo.getArticleContent());
-
         article.setIsEdit(isEdit);
-
         OggUser user = userMapper.selectByPrimaryKey(loginUser.getId());
         user.setArticleNum(user.getArticleNum()+1);
         userMapper.updateByPrimaryKeySelective(user);
-        System.out.println("id::::" + articleVo.getId());
 
         if(articleVo.getId() == 0){
+            article.setCreateDateTime(new Date());
+            article.setModifyDateTime(new Date());
+            article.setIsDelete(new Byte((byte) 0));
+            article.setReadNum(0);
+            article.setCommentNum(0);
+            article.setIsSticky(new Byte((byte) 0));
+            article.setIsFine(new Byte((byte) 0));
+            article.setArticleTitleIcon(articleVo.getArticleTitleIcon());
+            article.setArticleTitleName(articleVo.getArticleTitleName());
+            article.setArticleAuthId(articleVo.getArticleAuthId());
+            article.setArticleClassifyGroup(Arrays.toString(articleVo.getArticleClassifyGroup()));
+            article.setArticleSummary(articleVo.getArticleSummary());
+            article.setArticleContent(articleVo.getArticleContent());
+
             this.mapper.insertSelective(article);
         } else {
             article.setId(articleVo.getId());
-            this.mapper.updateByPrimaryKey(article);
+
+            OggArticle oggArticle = this.mapper.selectByPrimaryKey(articleVo.getId());
+            oggArticle.setModifyDateTime(new Date());
+            oggArticle.setArticleTitleIcon(articleVo.getArticleTitleIcon());
+            oggArticle.setArticleTitleName(articleVo.getArticleTitleName());
+            oggArticle.setArticleAuthId(articleVo.getArticleAuthId());
+            oggArticle.setArticleClassifyGroup(Arrays.toString(articleVo.getArticleClassifyGroup()));
+            oggArticle.setArticleSummary(articleVo.getArticleSummary());
+            oggArticle.setArticleContent(articleVo.getArticleContent());
+
+            this.mapper.updateByPrimaryKey(oggArticle);
         }
         return new ObjectRestResponse().rel(true).data("添加文章成功");
     }

@@ -65,6 +65,16 @@ public class UserController extends BaseController<OggUserBiz,OggUser> {
         Query query = new Query(params);
         return this.baseBiz.selectUserDetail(query);
     }
+    @RequestMapping("memberGrade")
+    public TableResultResponse listMemberGrade(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return this.baseBiz.listMemberGrade(query);
+    }
+    @RequestMapping("authGrade")
+    public TableResultResponse listAuthGrade(@RequestParam Map<String,Object> params){
+        Query query = new Query(params);
+        return this.baseBiz.listAuthGrade(query);
+    }
 
 
     @GetMapping("listArticle")

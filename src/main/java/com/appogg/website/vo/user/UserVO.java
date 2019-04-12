@@ -9,6 +9,9 @@ public class UserVO {
     private String userName;
     private Integer memberLevelId;
 
+    private String userEmail;
+
+
     private String memberLevelName;
 
     private String userCity;
@@ -29,6 +32,14 @@ public class UserVO {
 
     private String userAuthName;
     private String userAuthIcon;
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
 
     public String getUserAuthName() {
         return userAuthName;

@@ -24,6 +24,12 @@ public class OggAuth {
     private Date modifyDateTime;
 
     /**
+     * 价格：年
+     */
+    @Column(name = "auth_price")
+    private Integer authPrice;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -105,5 +111,23 @@ public class OggAuth {
      */
     public void setModifyDateTime(Date modifyDateTime) {
         this.modifyDateTime = modifyDateTime;
+    }
+
+    /**
+     * 获取价格：年
+     *
+     * @return auth_price - 价格：年
+     */
+    public Integer getAuthPrice() {
+        return authPrice;
+    }
+
+    /**
+     * 设置价格：年
+     *
+     * @param authPrice 价格：年
+     */
+    public void setAuthPrice(Integer authPrice) {
+        this.authPrice = authPrice;
     }
 }
