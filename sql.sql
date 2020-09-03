@@ -22,7 +22,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `ogg_article`;
 CREATE TABLE `ogg_article`  (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `create_date_time` datetime(0) NULL DEFAULT NULL,
   `modify_date_time` datetime(0) NULL DEFAULT NULL,
   `article_title_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
